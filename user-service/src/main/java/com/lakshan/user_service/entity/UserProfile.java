@@ -35,6 +35,18 @@ public class UserProfile {
     @Column(name = "blood_group")
     private String bloodGroup;
 
+    @Column(name = "license_number")
+    private String licenseNumber;
+
+    @Column(name = "specialization")
+    private String specialization;
+
+    @Column(name = "qualification")
+    private String qualification;
+
+    @Column(name = "experience_years")
+    private int experienceYears;
+
     @Column(name = "profile_type")
     private String profileType;
 
@@ -112,6 +124,38 @@ public class UserProfile {
 
     public void setBloodGroup(String bloodGroup) {
         this.bloodGroup = bloodGroup;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public int getExperienceYears() {
+        return experienceYears;
+    }
+
+    public void setExperienceYears(int experienceYears) {
+        this.experienceYears = experienceYears;
     }
 
     public String getProfileType() {
