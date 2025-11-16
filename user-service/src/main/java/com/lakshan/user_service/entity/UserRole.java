@@ -17,6 +17,9 @@ public class UserRole {
     @Column(name = "role_description")
     private String roleDescription;
 
+    @Column(name = "role_type")
+    private String roleType; // values like ADMIN, DOCTOR, PATIENT
+
     public int getId() {
         return id;
     }
@@ -39,5 +42,13 @@ public class UserRole {
 
     public void setRoleDescription(String roleDescription) {
         this.roleDescription = roleDescription;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 }
