@@ -17,10 +17,6 @@ public class UserRoleService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public void addNewUserRole(UserRole userRole) {
-        userRoleRepository.save(userRole);
-    }
-
     public UserRole getUserRoleById(int id){
         return userRoleRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("User Role not found with id: " + id)
@@ -31,17 +27,10 @@ public class UserRoleService {
         return userRoleRepository.findAll();
     }
 
-    public void updateUserRole(UserRole userRole){
-        if(userRoleRepository.existsById(userRole.getId()))
-            userRoleRepository.save(userRole);
-        else
-            throw new RuntimeException("User Role not found with id: " + userRole.getId());
+    public UserRole getUserRoleByName(String roleName){
+        return userRoleRepository.findByRoleName(roleName).orElseThrow(() ->
+                new RuntimeException("User Role not found with name: " + roleName)
+        );
     }
 
-    public void deleteUserRole(int id){
-        if(userRoleRepository.existsById(id))
-            userRoleRepository.deleteById(id);
-        else
-            throw new RuntimeException("User Role not found with id: " + id);
-    }
 }

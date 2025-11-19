@@ -1,5 +1,6 @@
 package com.lakshan.user_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,10 @@ public class UserRole {
 
     @Column(name = "role_description")
     private String roleDescription;
+
+    @Column(name = "secret_key")
+    @JsonIgnore
+    private String secretKey;
 
     public int getId() {
         return id;
@@ -39,5 +44,13 @@ public class UserRole {
 
     public void setRoleDescription(String roleDescription) {
         this.roleDescription = roleDescription;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 }
