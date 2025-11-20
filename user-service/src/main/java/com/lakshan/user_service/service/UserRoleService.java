@@ -17,17 +17,17 @@ public class UserRoleService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public UserRole getUserRoleById(int id){
+    public UserRole getUserRoleById(int id) {
         return userRoleRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("User Role not found with id: " + id)
         );
     }
 
-    public List<UserRole> getAllUserRoles(){
+    public List<UserRole> getAllUserRoles() {
         return userRoleRepository.findAll();
     }
 
-    public UserRole getUserRoleByName(String roleName){
+    public UserRole getUserRoleByName(String roleName) {
         return userRoleRepository.findByRoleName(roleName).orElseThrow(() ->
                 new IllegalArgumentException("User Role not found with name: " + roleName)
         );

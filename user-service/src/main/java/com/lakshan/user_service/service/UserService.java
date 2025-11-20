@@ -23,16 +23,15 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    public void addNewUser(UserRequest  userRequest) {
+    public void addNewUser(UserRequest userRequest) {
         UserRole userRole = userRoleRepository.findById(userRequest.getUserRole().getId())
                 .orElseThrow(() -> new RuntimeException(
                         "Role not found with id: " + userRequest.getUserRole().getId()
                 ));
 
-        if(userRole.getSecretKey() != null && !(userRole.getSecretKey().equals(userRequest.getSecretKey()))) {
+        if (userRole.getSecretKey() != null && !(userRole.getSecretKey().equals(userRequest.getSecretKey()))) {
             throw new IllegalArgumentException("Invalid secret key for role: " + userRole.getRoleName());
-        }
-        else {
+        } else {
             User user = new User();
             user.setUsername(userRequest.getUsername());
             user.setEmail(userRequest.getEmail());
@@ -54,7 +53,7 @@ public class UserService {
     }
 
     public void updateUser(UserRequest userRequest) {
-        if(userRepository.existsById(userRequest.getId())) {
+        if (userRepository.existsById(userRequest.getId())) {
             User user = new User();
             user.setId(userRequest.getId());
             user.setUsername(userRequest.getUsername());
@@ -62,8 +61,7 @@ public class UserService {
             user.setPassword(DigestUtils.sha256Hex(userRequest.getPassword()));
             user.setUserRole(userRequest.getUserRole());
             userRepository.save(user);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("User not found with id: " + userRequest.getId());
         }
     }

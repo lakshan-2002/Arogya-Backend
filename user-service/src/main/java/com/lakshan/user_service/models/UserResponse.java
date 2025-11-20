@@ -3,6 +3,7 @@ package com.lakshan.user_service.models;
 import com.lakshan.user_service.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 @AllArgsConstructor

@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUsername(userRequest.getUsername());
         userResponse.setEmail(userRequest.getEmail());
@@ -68,23 +68,24 @@ public class UserController {
         }
         return null;
     }
+
     @GetMapping("/getAllUsers")
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/getUser/{id}")
-    public User getUser(@PathVariable int id){
+    public User getUser(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/getUserByEmail/{email}")
-    public User getUserByEmail(@PathVariable String email){
+    public User getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest) {
         UserResponse userResponse = new UserResponse();
         userResponse.setUsername(userRequest.getUsername());
         userResponse.setEmail(userRequest.getEmail());
@@ -95,10 +96,9 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    public void deleteUser(@PathVariable int id){
+    public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
     }
-
 
 
 }

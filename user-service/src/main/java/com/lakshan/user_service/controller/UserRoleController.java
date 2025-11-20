@@ -20,17 +20,17 @@ public class UserRoleController {
     }
 
     @GetMapping("/getUserRole/{id}")
-    public UserRole getUserRoleById(@PathVariable int id){
+    public UserRole getUserRoleById(@PathVariable int id) {
         return userRoleService.getUserRoleById(id);
     }
 
     @GetMapping("/getAllUserRoles")
-    public List<UserRole> getUserRoles(){
+    public List<UserRole> getUserRoles() {
         return userRoleService.getAllUserRoles();
     }
 
     @GetMapping("/getUserRoleByName/{roleName}")
-    public UserRole getUserRoleByName(@PathVariable String roleName){
+    public UserRole getUserRoleByName(@PathVariable String roleName) {
         return userRoleService.getUserRoleByName(roleName);
     }
 

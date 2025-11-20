@@ -21,31 +21,31 @@ public class UserProfileService {
         userProfileRepository.save(userProfile);
     }
 
-    public UserProfile getUserProfileById(int id){
+    public UserProfile getUserProfileById(int id) {
         return userProfileRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("User Profile not found with id: " + id)
         );
     }
 
-    public List<UserProfile> getAllUserProfiles(){
+    public List<UserProfile> getAllUserProfiles() {
         return userProfileRepository.findAll();
     }
 
-    public UserProfile getUserProfileByUserId(int userId){
+    public UserProfile getUserProfileByUserId(int userId) {
         return userProfileRepository.findByUserId(userId).orElseThrow(() ->
                 new RuntimeException("User Profile not found with user id: " + userId)
         );
     }
 
-    public void updateUserProfile(UserProfile userProfile){
-        if(userProfileRepository.existsById(userProfile.getId()))
+    public void updateUserProfile(UserProfile userProfile) {
+        if (userProfileRepository.existsById(userProfile.getId()))
             userProfileRepository.save(userProfile);
         else
             throw new RuntimeException("User Profile not found with id: " + userProfile.getId());
     }
 
-    public void deleteUserProfile(int id){
-        if(userProfileRepository.existsById(id))
+    public void deleteUserProfile(int id) {
+        if (userProfileRepository.existsById(id))
             userProfileRepository.deleteById(id);
         else
             throw new RuntimeException("User Profile not found with id: " + id);
