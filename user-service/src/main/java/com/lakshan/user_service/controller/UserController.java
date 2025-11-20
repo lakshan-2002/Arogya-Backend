@@ -35,7 +35,7 @@ public class UserController {
         userResponse.setUserRole(userRequest.getUserRole());
 
         userService.addNewUser(userRequest);
-        return ResponseEntity.ok(userResponse);
+        return ResponseEntity.status(201).body(userResponse);
     }
 
     @PostMapping("/login")

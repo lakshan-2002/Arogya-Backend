@@ -22,7 +22,7 @@ public class DoctorProfileController {
     @PostMapping("/createDoctorProfile")
     public ResponseEntity<DoctorProfile> createDoctorProfile(@RequestBody DoctorProfile doctorProfile) {
         doctorProfileService.createNewDoctorProfile(doctorProfile);
-        return ResponseEntity.ok(doctorProfile);
+        return ResponseEntity.status(201).body(doctorProfile);
     }
 
     @GetMapping("/getDoctorProfile/{id}")
