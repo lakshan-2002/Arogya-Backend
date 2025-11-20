@@ -1,6 +1,8 @@
 package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.User;
+import com.lakshan.user_service.models.UserRequest;
+import com.lakshan.user_service.models.UserResponse;
 import com.lakshan.user_service.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +28,26 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
-        userService.addNewUser(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest){
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(userRequest.getUsername());
+        userResponse.setEmail(userRequest.getEmail());
+        userResponse.setUserRole(userRequest.getUserRole());
+
+        userService.addNewUser(userRequest);
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        ResponseEntity<?> validationResponse = validateUserInput(user);
+    public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
+        ResponseEntity<?> validationResponse = validateUserInput(userRequest);
 
         if (validationResponse != null) {
             return validationResponse;
         }
-        var dbUser = userService.getUserByEmail(user.getEmail());
+        var dbUser = userService.getUserByEmail(userRequest.getEmail());
 
-        if (dbUser != null && dbUser.getPassword().equals(DigestUtils.sha256Hex(user.getPassword()))) {
+        if (dbUser != null && dbUser.getPassword().equals(DigestUtils.sha256Hex(userRequest.getPassword()))) {
             return ResponseEntity.ok(dbUser);
         } else {
             errorResponse.put(ERROR_MESSAGE_KEY, "Invalid email or password");
@@ -49,14 +55,14 @@ public class UserController {
         }
     }
 
-    private ResponseEntity<?> validateUserInput(User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank() ||
-                user.getPassword() == null || user.getPassword().isBlank()) {
+    private ResponseEntity<?> validateUserInput(UserRequest userRequest) {
+        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank() ||
+                userRequest.getPassword() == null || userRequest.getPassword().isBlank()) {
             errorResponse.put(ERROR_MESSAGE_KEY, "Email and password must not be empty");
             return ResponseEntity.badRequest().body(errorResponse);
         }
 
-        if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (!userRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
             errorResponse.put(ERROR_MESSAGE_KEY, "Invalid email format");
             return ResponseEntity.badRequest().body(errorResponse);
         }
@@ -78,10 +84,14 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        user.setPassword(DigestUtils.sha256Hex(user.getPassword()));
-        userService.updateUser(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userRequest){
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUsername(userRequest.getUsername());
+        userResponse.setEmail(userRequest.getEmail());
+        userResponse.setUserRole(userRequest.getUserRole());
+
+        userService.updateUser(userRequest);
+        return ResponseEntity.ok(userResponse);
     }
 
     @DeleteMapping("/deleteUser/{id}")

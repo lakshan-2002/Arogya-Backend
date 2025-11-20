@@ -1,7 +1,11 @@
 package com.lakshan.user_service.service;
 
 import com.lakshan.user_service.entity.User;
+import com.lakshan.user_service.entity.UserRole;
+import com.lakshan.user_service.models.UserRequest;
 import com.lakshan.user_service.repository.UserRepository;
+import com.lakshan.user_service.repository.UserRoleRepository;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +15,32 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
-    public void addNewUser(User user) {
-        userRepository.save(user);
+    public void addNewUser(UserRequest  userRequest) {
+        UserRole userRole = userRoleRepository.findById(userRequest.getUserRole().getId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Role not found with id: " + userRequest.getUserRole().getId()
+                ));
+
+        if(userRole.getSecretKey() != null && !(userRole.getSecretKey().equals(userRequest.getSecretKey()))) {
+            throw new IllegalArgumentException("Invalid secret key for role: " + userRole.getRoleName());
+        }
+        else {
+            User user = new User();
+            user.setUsername(userRequest.getUsername());
+            user.setEmail(userRequest.getEmail());
+            user.setPassword(DigestUtils.sha256Hex(userRequest.getPassword()));
+            user.setUserRole(userRole);
+            userRepository.save(user);
+        }
+
     }
 
     public List<User> getAllUsers() {
@@ -27,27 +49,35 @@ public class UserService {
 
     public User getUserById(int id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("User not found with id: " + id)
+                new IllegalArgumentException("User not found with id: " + id)
         );
     }
 
-    public void updateUser(User user){
-        if(userRepository.existsById(user.getId()))
+    public void updateUser(UserRequest userRequest) {
+        if(userRepository.existsById(userRequest.getId())) {
+            User user = new User();
+            user.setId(userRequest.getId());
+            user.setUsername(userRequest.getUsername());
+            user.setEmail(userRequest.getEmail());
+            user.setPassword(DigestUtils.sha256Hex(userRequest.getPassword()));
+            user.setUserRole(userRequest.getUserRole());
             userRepository.save(user);
-        else
-            throw new RuntimeException("User not found with id: " + user.getId());
+        }
+        else {
+            throw new IllegalArgumentException("User not found with id: " + userRequest.getId());
+        }
     }
 
-    public void deleteUser(int id){
-        if(userRepository.existsById(id))
+    public void deleteUser(int id) {
+        if (userRepository.existsById(id))
             userRepository.deleteById(id);
         else
-            throw new RuntimeException("User not found with id: " + id);
+            throw new IllegalArgumentException("User not found with id: " + id);
     }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new RuntimeException("User not found with email: " + email)
+                new IllegalArgumentException("User not found with email: " + email)
         );
 
     }

@@ -19,7 +19,7 @@ public class UserRoleService {
 
     public UserRole getUserRoleById(int id){
         return userRoleRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("User Role not found with id: " + id)
+                new IllegalArgumentException("User Role not found with id: " + id)
         );
     }
 
@@ -29,7 +29,7 @@ public class UserRoleService {
 
     public UserRole getUserRoleByName(String roleName){
         return userRoleRepository.findByRoleName(roleName).orElseThrow(() ->
-                new RuntimeException("User Role not found with name: " + roleName)
+                new IllegalArgumentException("User Role not found with name: " + roleName)
         );
     }
 
