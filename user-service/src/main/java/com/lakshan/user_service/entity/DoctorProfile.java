@@ -3,12 +3,12 @@ package com.lakshan.user_service.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_profiles")
-public class UserProfile {
+@Table(name = "doctor_profile")
+public class DoctorProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profile_id")
+    @Column(name = "doctor_id")
     private int id;
 
     @Column(name = "first_name")
@@ -26,15 +26,6 @@ public class UserProfile {
     @Column(name = "nic_number")
     private String nicNumber;
 
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "gender")
-    private String gender;
-
-    @Column(name = "blood_group")
-    private String bloodGroup;
-
     @Column(name = "license_number")
     private String licenseNumber;
 
@@ -46,9 +37,6 @@ public class UserProfile {
 
     @Column(name = "experience_years")
     private int experienceYears;
-
-    @Column(name = "profile_type")
-    private String profileType;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -102,30 +90,6 @@ public class UserProfile {
         this.nicNumber = nicNumber;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
-    }
-
     public String getLicenseNumber() {
         return licenseNumber;
     }
@@ -156,14 +120,6 @@ public class UserProfile {
 
     public void setExperienceYears(int experienceYears) {
         this.experienceYears = experienceYears;
-    }
-
-    public String getProfileType() {
-        return profileType;
-    }
-
-    public void setProfileType(String profileType) {
-        this.profileType = profileType;
     }
 
     public User getUser() {
