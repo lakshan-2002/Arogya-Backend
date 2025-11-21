@@ -41,7 +41,7 @@ public class DoctorProfileController {
     }
 
     @PutMapping("/updateDoctorProfile")
-    public ResponseEntity<DoctorProfile> updateDoctorProfile(@RequestBody DoctorProfile doctorProfile){
+    public ResponseEntity<DoctorProfile> updateDoctorProfile(@RequestBody DoctorProfile doctorProfile) {
         doctorProfileService.updateDoctorProfile(doctorProfile);
         return ResponseEntity.ok(doctorProfile);
     }
