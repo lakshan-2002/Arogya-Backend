@@ -29,8 +29,8 @@ public class TechnicianProfile {
     @Column(name = "technician_field")
     private String technicianField;
 
-    @Column(name = "licence_number")
-    private String licenceNumber;
+    @Column(name = "license_number")
+    private String licenseNumber;
 
     @Column(name = "certification")
     private String certification;
@@ -98,12 +98,12 @@ public class TechnicianProfile {
         this.technicianField = technicianField;
     }
 
-    public String getLicenceNumber() {
-        return licenceNumber;
+    public String getLicenseNumber() {
+        return licenseNumber;
     }
 
-    public void setLicenceNumber(String licenceNumber) {
-        this.licenceNumber = licenceNumber;
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
     }
 
     public String getCertification() {
