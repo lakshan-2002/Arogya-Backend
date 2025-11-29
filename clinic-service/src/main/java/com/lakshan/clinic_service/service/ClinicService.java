@@ -4,6 +4,7 @@ import com.lakshan.clinic_service.client.UserServiceClient;
 import com.lakshan.clinic_service.entity.Clinic;
 import com.lakshan.clinic_service.entity.ClinicDoctors;
 import com.lakshan.clinic_service.model.ClinicRequest;
+import com.lakshan.clinic_service.model.DoctorProfileDTO;
 import com.lakshan.clinic_service.repository.ClinicDoctorsRepository;
 import com.lakshan.clinic_service.repository.ClinicRepository;
 import jakarta.transaction.Transactional;
@@ -39,20 +40,23 @@ public class ClinicService {
         clinic.setScheduledDate(clinicRequest.getScheduledDate());
         clinic.setScheduledTime(clinicRequest.getScheduledTime());
         clinic.setStatus(clinicRequest.getStatus());
-
         clinicRepository.save(clinic);
 
-        for (Integer doctorIds : clinicRequest.getDoctorIds()) {
-            var doctorProfileDTO = userServiceClient.getDoctorProfile(doctorIds);
+        List<DoctorProfileDTO> doctorProfileDTOS = userServiceClient.
+                getDoctorProfiles(clinicRequest.getDoctorIds());
 
-            ClinicDoctors clinicDoctors = new ClinicDoctors();
-            clinicDoctors.setClinic(clinic);
-            clinicDoctors.setDoctorRefId(doctorIds);
-            clinicDoctors.setDoctorName(doctorProfileDTO.getFirstName());
-            clinicDoctors.setSpecialization(doctorProfileDTO.getSpecialization());
+        List<ClinicDoctors> clinicDoctorsList = doctorProfileDTOS.stream()
+                .map(doctorProfileDTO -> {
+                    ClinicDoctors clinicDoctors = new ClinicDoctors();
+                    clinicDoctors.setClinic(clinic);
+                    clinicDoctors.setDoctorRefId(doctorProfileDTO.getId());
+                    clinicDoctors.setDoctorName(doctorProfileDTO.getFirstName());
+                    clinicDoctors.setSpecialization(doctorProfileDTO.getSpecialization());
+                    return clinicDoctors;
+                })
+                .toList();
 
-            clinicDoctorsRepository.save(clinicDoctors);
-        }
+        clinicDoctorsRepository.saveAll(clinicDoctorsList);
     }
 
     public Clinic getClinicById(int id) {
@@ -72,18 +76,21 @@ public class ClinicService {
 
             clinicDoctorsRepository.deleteByClinicId(clinicRequest.getId());
 
-            for (Integer doctorIds : clinicRequest.getDoctorIds()) {
-                var doctorProfileDTO = userServiceClient.getDoctorProfile(doctorIds);
+            List<DoctorProfileDTO> doctorProfileDTOS = userServiceClient.
+                    getDoctorProfiles(clinicRequest.getDoctorIds());
 
-                ClinicDoctors clinicDoctors = new ClinicDoctors();
-                clinicDoctors.setClinic(clinic);
-                clinicDoctors.setDoctorRefId(doctorIds);
-                clinicDoctors.setDoctorName(doctorProfileDTO.getFirstName());
-                clinicDoctors.setSpecialization(doctorProfileDTO.getSpecialization());
+            List<ClinicDoctors> clinicDoctorsList = doctorProfileDTOS.stream()
+                    .map(doctorProfileDTO -> {
+                        ClinicDoctors clinicDoctors = new ClinicDoctors();
+                        clinicDoctors.setClinic(clinic);
+                        clinicDoctors.setDoctorRefId(doctorProfileDTO.getId());
+                        clinicDoctors.setDoctorName(doctorProfileDTO.getFirstName());
+                        clinicDoctors.setSpecialization(doctorProfileDTO.getSpecialization());
+                        return clinicDoctors;
+                    })
+                    .toList();
 
-                clinicDoctorsRepository.save(clinicDoctors);
-
-            }
+            clinicDoctorsRepository.saveAll(clinicDoctorsList);
         } else {
             throw new IllegalArgumentException("Clinic not found with id: " + clinicRequest.getId());
         }
@@ -110,3 +117,4 @@ public class ClinicService {
         }
     }
 }
+

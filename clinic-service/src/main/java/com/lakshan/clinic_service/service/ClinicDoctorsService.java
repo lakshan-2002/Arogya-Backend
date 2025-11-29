@@ -1,5 +1,6 @@
 package com.lakshan.clinic_service.service;
 
+
 import com.lakshan.clinic_service.entity.ClinicDoctors;
 import com.lakshan.clinic_service.repository.ClinicDoctorsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,5 @@ public class ClinicDoctorsService {
             return clinicDoctorsRepository.findByClinicId(clinicId);
         }
     }
+
 }

@@ -25,6 +25,11 @@ public class DoctorProfileController {
         return ResponseEntity.status(201).body(doctorProfile);
     }
 
+    @PostMapping("/bulk")
+    public List<DoctorProfile> getDoctorProfilesByIds(@RequestBody List<Integer> ids) {
+        return doctorProfileService.getDoctorProfilesByIds(ids);
+    }
+
     @GetMapping("/getDoctorProfile/{id}")
     public DoctorProfile getDoctorProfile(@PathVariable int id) {
         return doctorProfileService.getDoctorProfileById(id);

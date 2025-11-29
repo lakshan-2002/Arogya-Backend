@@ -31,6 +31,10 @@ public class DoctorProfileService {
         );
     }
 
+    public List<DoctorProfile> getDoctorProfilesByIds(List<Integer> ids) {
+        return doctorProfileRepository.findAllById(ids);
+    }
+
     public DoctorProfile getDoctorProfileByUserId(int userId) {
         return doctorProfileRepository.findByUserId(userId).orElseThrow(() ->
                 new IllegalArgumentException("Doctor Profile not found with user id: " + userId)
