@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin_profile")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminProfileController {
 
     private final AdminProfileService adminProfileService;
