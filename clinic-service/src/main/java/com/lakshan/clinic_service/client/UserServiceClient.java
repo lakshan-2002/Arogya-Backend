@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "user-service", url = "http://localhost:8081")
+@FeignClient(name = "USER-SERVICE")
 public interface UserServiceClient {
 
     @PostMapping("/doctor_profile/bulk")
