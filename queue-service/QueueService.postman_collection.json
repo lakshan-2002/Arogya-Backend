@@ -1,0 +1,108 @@
+{
+  "info": {
+    "name": "Queue Service APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for queue-service endpoints (create token, get queue, get token, update status)."
+  },
+  "item": [
+    {
+      "name": "Create Queue Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"clinicId\": \"1\",\n  \"patientId\": \"5\",\n  \"consultationId\": \"123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8085/queue/tokens",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "queue",
+            "tokens"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Clinic Queue",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/queue/clinics/1/tokens",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "queue",
+            "clinics",
+            "1",
+            "tokens"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Token By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8085/queue/tokens/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "queue",
+            "tokens",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Token Status",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"SERVING\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8085/queue/tokens/1/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8085",
+          "path": [
+            "queue",
+            "tokens",
+            "1",
+            "status"
+          ]
+        }
+      }
+    }
+  ]
+}
