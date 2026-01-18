@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Consultation Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Consultation",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patientId\": 1,\n  \"doctorId\": 2,\n  \"clinicId\": 3,\n  \"queueTokenId\": 4,\n  \"chiefComplaint\": \"Headache\",\n  \"sessionNumber\": 1,\n  \"bookedAt\": \"2026-01-18T10:00:00\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/consultations",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations"]
+        }
+      }
+    },
+    {
+      "name": "Get Consultation by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/consultations/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations", "1"]
+        }
+      }
+    },
+    {
+      "name": "List Consultations",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/consultations?patientId=1&doctorId=2&clinicId=3&status=COMPLETED&page=0&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations"],
+          "query": [
+            { "key": "patientId", "value": "1" },
+            { "key": "doctorId", "value": "2" },
+            { "key": "clinicId", "value": "3" },
+            { "key": "status", "value": "COMPLETED" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "20" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Consultation",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"chiefComplaint\": \"Updated complaint\",\n  \"status\": \"COMPLETED\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/consultations/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations", "1"]
+        }
+      }
+    },
+    {
+      "name": "Cancel Consultation",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/consultations/1/cancel",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations", "1", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "Complete Consultation",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/consultations/1/complete",
+          "host": ["{{baseUrl}}"],
+          "path": ["consultations", "1", "complete"]
+        }
+      }
+    }
+  ]
+}
