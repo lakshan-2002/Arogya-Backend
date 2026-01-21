@@ -12,17 +12,23 @@ spring:
             - id: user-service
               uri: lb://USER-SERVICE
               predicates:
-                - Path=/users/**
+                - Path=/users/**, /admin_profile/**, /doctor_profile/**
+                - Path=/patient_profile/**, /technician_profile/**
 
             - id: clinic-service
               uri: lb://CLINIC-SERVICE
               predicates:
-                - Path=/clinics/**
+                - Path=/clinics/**, /clinic_doctors/**
 
             - id: queue-service
               uri: lb://QUEUE-SERVICE
               predicates:
                 - Path=/queue/**
+
+            - id: consultation-service
+              uri: lb://CONSULTATION-SERVICE
+              predicates:
+                - Path=/consultations/**
 
 eureka:
   instance:
