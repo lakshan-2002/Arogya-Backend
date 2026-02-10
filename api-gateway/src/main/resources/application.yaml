@@ -30,6 +30,11 @@ spring:
               predicates:
                 - Path=/consultations/**, /lab-tests/**
 
+            - id: medical-records-service
+              uri: lb://MEDICAL-RECORDS-SERVICE
+              predicates:
+                - Path=/test-results/**
+
 eureka:
   instance:
     hostname: localhost
