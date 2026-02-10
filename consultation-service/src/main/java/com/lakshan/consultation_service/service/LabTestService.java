@@ -185,27 +185,22 @@ public class LabTestService {
 
     private void applyStatusTransition(LabTest labTest, TestStatus newStatus) {
         TestStatus current = labTest.getStatus();
-        switch (newStatus) {
-            case PENDING -> {
-                if (current != TestStatus.PENDING && current != TestStatus.CANCELLED) {
-                    throw new IllegalStateException("Cannot revert to PENDING from " + current);
-                }
+        if (newStatus == TestStatus.PENDING) {
+            if (current != TestStatus.PENDING && current != TestStatus.CANCELLED) {
+                throw new IllegalStateException("Cannot revert to PENDING from " + current);
             }
-            case IN_PROGRESS -> {
-                if (current != TestStatus.PENDING) {
-                    throw new IllegalStateException("Can start only from PENDING");
-                }
+        } else if (newStatus == TestStatus.IN_PROGRESS) {
+            if (current != TestStatus.PENDING) {
+                throw new IllegalStateException("Can start only from PENDING");
             }
-            case COMPLETED -> {
-                if (current != TestStatus.IN_PROGRESS) {
-                    throw new IllegalStateException("Can complete only from IN_PROGRESS");
-                }
-                labTest.setCompletedAt(LocalDateTime.now());
+        } else if (newStatus == TestStatus.COMPLETED) {
+            if (current != TestStatus.IN_PROGRESS) {
+                throw new IllegalStateException("Can complete only from IN_PROGRESS");
             }
-            case CANCELLED -> {
-                if (current == TestStatus.COMPLETED) {
-                    throw new IllegalStateException("Cannot cancel a completed test");
-                }
+            labTest.setCompletedAt(LocalDateTime.now());
+        } else if (newStatus == TestStatus.CANCELLED) {
+            if (current == TestStatus.COMPLETED) {
+                throw new IllegalStateException("Cannot cancel a completed test");
             }
         }
         labTest.setStatus(newStatus);
