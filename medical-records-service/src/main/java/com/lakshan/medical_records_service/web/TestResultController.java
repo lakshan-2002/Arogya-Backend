@@ -90,6 +90,16 @@ public class TestResultController {
         return ResponseEntity.ok(service.updateTestResult(id, testResultDescription, technicianNotes, file));
     }
 
+    @PostMapping(value = "/{id}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<TestResultDtos.Response> updateTestResultPost(
+            @PathVariable Long id,
+            @RequestParam(required = false) String testResultDescription,
+            @RequestParam(required = false) String technicianNotes,
+            @RequestParam(required = false) MultipartFile file) {
+        
+        return ResponseEntity.ok(service.updateTestResult(id, testResultDescription, technicianNotes, file));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTestResult(@PathVariable Long id) {
         service.deleteTestResult(id);
