@@ -106,6 +106,12 @@ public class TestResultController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/{id}/delete")
+    public ResponseEntity<Void> deleteTestResultPost(@PathVariable Long id) {
+        service.deleteTestResult(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     public ResponseEntity<Page<TestResultDtos.Response>> getAllTestResults(
             @RequestParam(defaultValue = "0") int page,

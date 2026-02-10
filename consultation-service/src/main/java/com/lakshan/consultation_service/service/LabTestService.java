@@ -190,8 +190,8 @@ public class LabTestService {
                 throw new IllegalStateException("Cannot revert to PENDING from " + current);
             }
         } else if (newStatus == TestStatus.IN_PROGRESS) {
-            if (current != TestStatus.PENDING) {
-                throw new IllegalStateException("Can start only from PENDING");
+            if (current != TestStatus.PENDING && current != TestStatus.COMPLETED) {
+                throw new IllegalStateException("Can start only from PENDING or COMPLETED");
             }
         } else if (newStatus == TestStatus.COMPLETED) {
             if (current != TestStatus.IN_PROGRESS) {

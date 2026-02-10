@@ -147,12 +147,21 @@ public class TestResultService {
         TestResult testResult = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Test result not found"));
         
+        Long labTestId = testResult.getLabTestId();
+        
         // Delete file if exists
         if (testResult.getFilePath() != null) {
             fileStorageService.deleteFile(testResult.getFilePath());
         }
         
         repository.deleteById(id);
+        
+        // Update lab test status back to IN_PROGRESS
+        try {
+            consultationClient.startLabTest(labTestId);
+        } catch (Exception e) {
+            System.err.println("Failed to update lab test status: " + e.getMessage());
+        }
     }
 
     @Transactional(readOnly = true)
