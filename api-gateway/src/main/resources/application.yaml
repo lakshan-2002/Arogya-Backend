@@ -28,7 +28,7 @@ spring:
             - id: consultation-service
               uri: lb://CONSULTATION-SERVICE
               predicates:
-                - Path=/consultations/**
+                - Path=/consultations/**, /lab-tests/**
 
 eureka:
   instance:

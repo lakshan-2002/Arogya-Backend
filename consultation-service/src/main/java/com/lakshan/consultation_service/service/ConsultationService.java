@@ -6,6 +6,7 @@ import com.lakshan.consultation_service.client.UserClient;
 import com.lakshan.consultation_service.domain.Consultation;
 import com.lakshan.consultation_service.domain.Consultation.Status;
 import com.lakshan.consultation_service.dto.ConsultationDtos;
+import com.lakshan.consultation_service.dto.LabTestDtos;
 import com.lakshan.consultation_service.mapper.ConsultationMapper;
 import com.lakshan.consultation_service.repository.ConsultationRepository;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ConsultationService {
@@ -21,12 +23,18 @@ public class ConsultationService {
     private final UserClient userClient;
     private final ClinicClient clinicClient;
     private final QueueClient queueClient;
+    private LabTestService labTestService;
 
     public ConsultationService(ConsultationRepository repository, UserClient userClient, ClinicClient clinicClient, QueueClient queueClient) {
         this.repository = repository;
         this.userClient = userClient;
         this.clinicClient = clinicClient;
         this.queueClient = queueClient;
+    }
+    
+    // Setter injection to avoid circular dependency
+    public void setLabTestService(LabTestService labTestService) {
+        this.labTestService = labTestService;
     }
 
     @Transactional
@@ -49,6 +57,35 @@ public class ConsultationService {
     public ConsultationDtos.Response get(Long id) {
         Consultation c = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Consultation not found"));
         return ConsultationMapper.toResponse(c);
+    }
+    
+    @Transactional(readOnly = true)
+    public ConsultationDtos.ResponseWithTests getWithTests(Long id) {
+        Consultation c = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Consultation not found"));
+        List<LabTestDtos.Response> tests = labTestService != null 
+                ? labTestService.getTestsByConsultation(id) 
+                : List.of();
+        return toResponseWithTests(c, tests);
+    }
+    
+    private ConsultationDtos.ResponseWithTests toResponseWithTests(Consultation c, List<LabTestDtos.Response> tests) {
+        return new ConsultationDtos.ResponseWithTests(
+                c.getId(),
+                c.getPatientId(),
+                c.getDoctorId(),
+                c.getClinicId(),
+                c.getQueueTokenId(),
+                c.getStatus(),
+                c.getChiefComplaint(),
+                c.getPastMedicalHistory(),
+                c.getPresentIllness(),
+                c.getRecommendations(),
+                c.getSessionNumber(),
+                c.getBookedAt(),
+                c.getCompletedAt(),
+                c.getUpdatedAt(),
+                tests
+        );
     }
 
     @Transactional(readOnly = true)

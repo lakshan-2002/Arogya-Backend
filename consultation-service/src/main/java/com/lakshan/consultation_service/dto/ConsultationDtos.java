@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ConsultationDtos {
     public record CreateRequest(
@@ -43,5 +44,23 @@ public class ConsultationDtos {
             LocalDateTime bookedAt,
             LocalDateTime completedAt,
             LocalDateTime updatedAt
+    ) {}
+    
+    public record ResponseWithTests(
+            Long id,
+            Long patientId,
+            Long doctorId,
+            Long clinicId,
+            Long queueTokenId,
+            Status status,
+            String chiefComplaint,
+            String pastMedicalHistory,
+            String presentIllness,
+            String recommendations,
+            Integer sessionNumber,
+            LocalDateTime bookedAt,
+            LocalDateTime completedAt,
+            LocalDateTime updatedAt,
+            List<LabTestDtos.Response> labTests
     ) {}
 }

@@ -32,6 +32,11 @@ public class ConsultationController {
     public ResponseEntity<ConsultationDtos.Response> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.get(id));
     }
+    
+    @GetMapping("/{id}/with-tests")
+    public ResponseEntity<ConsultationDtos.ResponseWithTests> getWithTests(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getWithTests(id));
+    }
 
     @GetMapping
     public ResponseEntity<Page<ConsultationDtos.Response>> list(
