@@ -4,17 +4,22 @@ import com.lakshan.medical_records_service.client.ConsultationClient;
 import com.lakshan.medical_records_service.domain.TestResult;
 import com.lakshan.medical_records_service.dto.TestResultDtos;
 import com.lakshan.medical_records_service.repository.TestResultRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class TestResultService {
+
+    private static final Logger log = LoggerFactory.getLogger(TestResultService.class);
 
     private final TestResultRepository repository;
     private final FileStorageService fileStorageService;
@@ -96,17 +101,27 @@ public class TestResultService {
 
     @Transactional(readOnly = true)
     public byte[] downloadFile(Long id) {
+        log.info("Attempting to download file for test result ID: {}", id);
         TestResult testResult = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Test result not found"));
+                .orElseThrow(() -> {
+                    log.error("Test result not found with ID: {}", id);
+                    return new IllegalArgumentException("Test result not found with ID: " + id);
+                });
         
         if (testResult.getFilePath() == null) {
-            throw new IllegalArgumentException("No file attached to this test result");
+            log.error("No file attached to test result ID: {}", id);
+            throw new IllegalArgumentException("No file attached to test result ID: " + id);
         }
 
         try {
-            return java.nio.file.Files.readAllBytes(fileStorageService.loadFile(testResult.getFilePath()));
+            Path filePath = fileStorageService.loadFile(testResult.getFilePath());
+            log.info("Reading file: {} for test result ID: {}", filePath, id);
+            byte[] fileBytes = java.nio.file.Files.readAllBytes(filePath);
+            log.info("Successfully read {} bytes from file for test result ID: {}", fileBytes.length, id);
+            return fileBytes;
         } catch (Exception e) {
-            throw new RuntimeException("Could not read file", e);
+            log.error("Failed to read file for test result ID: {}, filePath: {}", id, testResult.getFilePath(), e);
+            throw new RuntimeException("Could not read file: " + testResult.getFilePath() + " for test result ID: " + id + ". Error: " + e.getMessage(), e);
         }
     }
 
