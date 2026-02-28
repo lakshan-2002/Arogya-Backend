@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: API-GATEWAY
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   cloud:
     gateway:
       server:
@@ -14,26 +20,64 @@ spring:
               predicates:
                 - Path=/users/**, /admin_profile/**, /doctor_profile/**
                 - Path=/patient_profile/**, /technician_profile/**
+              filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 2
+                  redis-rate-limiter.burstCapacity: 4
+                  redis-rate-limiter.requestedTokens: 1
+                  key-resolver: "#{@ipKeyResolver}"
 
             - id: clinic-service
               uri: lb://CLINIC-SERVICE
               predicates:
                 - Path=/clinics/**, /clinic_doctors/**
+              filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 2
+                  redis-rate-limiter.burstCapacity: 4
+                  redis-rate-limiter.requestedTokens: 1
+                  key-resolver: "#{@ipKeyResolver}"
 
             - id: queue-service
               uri: lb://QUEUE-SERVICE
               predicates:
                 - Path=/queue/**
+              filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 2
+                  redis-rate-limiter.burstCapacity: 4
+                  redis-rate-limiter.requestedTokens: 1
+                  key-resolver: "#{@ipKeyResolver}"
 
             - id: consultation-service
               uri: lb://CONSULTATION-SERVICE
               predicates:
                 - Path=/consultations/**, /lab-tests/**
+              filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 2
+                  redis-rate-limiter.burstCapacity: 4
+                  redis-rate-limiter.requestedTokens: 1
+                  key-resolver: "#{@ipKeyResolver}"
 
             - id: medical-records-service
               uri: lb://MEDICAL-RECORDS-SERVICE
               predicates:
                 - Path=/test-results/**
+              filters:
+              - name: RequestRateLimiter
+                args:
+                  redis-rate-limiter.replenishRate: 2
+                  redis-rate-limiter.burstCapacity: 4
+                  redis-rate-limiter.requestedTokens: 1
+                  key-resolver: "#{@ipKeyResolver}"
+
+
+
 
 eureka:
   instance:
