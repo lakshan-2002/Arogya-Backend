@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
 
 spring:
   application:
@@ -18,8 +18,8 @@ spring:
             - id: user-service
               uri: lb://USER-SERVICE
               predicates:
-                - Path=/users/**, /admin_profile/**, /doctor_profile/**
-                - Path=/patient_profile/**, /technician_profile/**
+                - Path=/roles/**, /users/**, /admin_profile/**, /doctor_profile/**,
+                  /patient_profile/**, /technician_profile/**
               filters:
               - name: RequestRateLimiter
                 args:
