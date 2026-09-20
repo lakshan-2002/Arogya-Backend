@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/queue")
-@CrossOrigin(origins = "http://localhost:5173")
 public class QueueTokenController {
 
     private final QueueTokenService queueTokenService;
