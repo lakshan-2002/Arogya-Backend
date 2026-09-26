@@ -1,6 +1,8 @@
 package com.lakshan.user_service.models;
 
 import com.lakshan.user_service.entity.UserRole;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -12,8 +14,14 @@ public class UserRequest implements Serializable {
 
     private int id;
     private String username;
+
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
+
+    @NotEmpty(message = "Password is required")
     private String password;
+
     private String secretKey;
     private UserRole userRole;
 
@@ -64,5 +72,4 @@ public class UserRequest implements Serializable {
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
-
 }
