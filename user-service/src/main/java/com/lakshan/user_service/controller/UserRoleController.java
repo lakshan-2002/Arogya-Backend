@@ -32,6 +32,4 @@ public class UserRoleController {
     public UserRole getUserRoleByName(@PathVariable String roleName) {
         return userRoleService.getUserRoleByName(roleName);
     }
-
-
 }

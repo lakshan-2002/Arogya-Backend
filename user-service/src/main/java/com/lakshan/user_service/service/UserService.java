@@ -1,55 +1,55 @@
 package com.lakshan.user_service.service;
 
 import com.lakshan.user_service.entity.User;
-import com.lakshan.user_service.entity.UserRole;
+import com.lakshan.user_service.exceptions.DuplicateResourceException;
+import com.lakshan.user_service.exceptions.InvalidKeyException;
+import com.lakshan.user_service.exceptions.UserNotFoundException;
 import com.lakshan.user_service.models.UserRequest;
 import com.lakshan.user_service.repository.UserRepository;
-import com.lakshan.user_service.repository.UserRoleRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void addNewUser(UserRequest userRequest) {
-        UserRole userRole = userRoleRepository.findById(userRequest.getUserRole().getId())
-                .orElseThrow(() -> new RuntimeException(
-                        "Role not found with id: " + userRequest.getUserRole().getId()
-                ));
-
-        if (userRole.getSecretKey() != null && !(userRole.getSecretKey().equals(userRequest.getSecretKey()))) {
-            throw new IllegalArgumentException("Invalid secret key for role: " + userRole.getRoleName());
-        } else {
+        if (userRequest
+                .getUserRole()
+                .getSecretKey() != null
+                &&
+                !(userRequest
+                        .getUserRole()
+                        .getSecretKey()
+                        .equals(userRequest.getSecretKey())
+                )
+        ) {
+            throw new InvalidKeyException("Invalid secret key for role: " + userRequest
+                    .getUserRole()
+                    .getRoleName()
+            );
+        }
+        if(userRepository.findByEmail(userRequest.getEmail()).isPresent()){
+            throw new DuplicateResourceException("User already exists with email: " + userRequest.getEmail());
+        }
+        else {
             User user = new User();
             user.setUsername(userRequest.getUsername());
             user.setEmail(userRequest.getEmail());
-            user.setPassword(DigestUtils.sha256Hex(userRequest.getPassword()));
-            user.setUserRole(userRole);
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            user.setUserRole(userRequest.getUserRole());
             userRepository.save(user);
         }
-
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User getUserById(int id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("User not found with id: " + id)
-        );
     }
 
     public void updateUser(UserRequest userRequest) {
@@ -62,21 +62,13 @@ public class UserService {
             user.setUserRole(userRequest.getUserRole());
             userRepository.save(user);
         } else {
-            throw new IllegalArgumentException("User not found with id: " + userRequest.getId());
+            throw new UserNotFoundException("User not found with id: " + userRequest.getId());
         }
-    }
-
-    public void deleteUser(int id) {
-        if (userRepository.existsById(id))
-            userRepository.deleteById(id);
-        else
-            throw new IllegalArgumentException("User not found with id: " + id);
     }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("User not found with email: " + email)
+                new UserNotFoundException("User not found with email: " + email)
         );
-
     }
 }

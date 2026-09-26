@@ -1,86 +1,62 @@
 package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.User;
+import com.lakshan.user_service.exceptions.InvalidCredentialsException;
+import com.lakshan.user_service.models.AuthResponse;
 import com.lakshan.user_service.models.UserRequest;
 import com.lakshan.user_service.models.UserResponse;
+import com.lakshan.user_service.security.JwtUtil;
 import com.lakshan.user_service.service.UserService;
-import org.apache.commons.codec.digest.DigestUtils;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final Map<String, String> errorResponse = new HashMap<>();
-    private static final String ERROR_MESSAGE_KEY = "message";
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<UserResponse> addUser(@RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserRequest userRequest) {
+        userService.addNewUser(userRequest);
+
         UserResponse userResponse = new UserResponse();
         userResponse.setUsername(userRequest.getUsername());
         userResponse.setEmail(userRequest.getEmail());
         userResponse.setUserRole(userRequest.getUserRole());
 
-        userService.addNewUser(userRequest);
         return ResponseEntity.status(201).body(userResponse);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
-        ResponseEntity<?> validationResponse = validateUserInput(userRequest);
-
-        if (validationResponse != null) {
-            return validationResponse;
-        }
+    public ResponseEntity<AuthResponse> login(@RequestBody UserRequest userRequest) {
         var dbUser = userService.getUserByEmail(userRequest.getEmail());
 
-        if (dbUser != null && dbUser.getPassword().equals(DigestUtils.sha256Hex(userRequest.getPassword()))) {
-            return ResponseEntity.ok(dbUser);
-        } else {
-            errorResponse.put(ERROR_MESSAGE_KEY, "Invalid email or password");
-            return ResponseEntity.status(401).body(errorResponse);
-        }
-    }
-
-    private ResponseEntity<?> validateUserInput(UserRequest userRequest) {
-        if (userRequest.getEmail() == null || userRequest.getEmail().isBlank() ||
-                userRequest.getPassword() == null || userRequest.getPassword().isBlank()) {
-            errorResponse.put(ERROR_MESSAGE_KEY, "Email and password must not be empty");
-            return ResponseEntity.badRequest().body(errorResponse);
+        if(!passwordEncoder.matches(userRequest.getPassword(), dbUser.getPassword())){
+            throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        if (!userRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-            errorResponse.put(ERROR_MESSAGE_KEY, "Invalid email format");
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-        return null;
-    }
+        String token = jwtUtil.generateToken(dbUser.getEmail(), dbUser.getUserRole().getRoleName());
 
-    @GetMapping("/getAllUsers")
-    public List<User> getUsers() {
-        return userService.getAllUsers();
-    }
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setToken(token);
+        authResponse.setUsername(dbUser.getUsername());
+        authResponse.setEmail(dbUser.getEmail());
+        authResponse.setRole(dbUser.getUserRole().getRoleName());
 
-    @GetMapping("/getUser/{id}")
-    public User getUser(@PathVariable int id) {
-        return userService.getUserById(id);
-    }
-
-    @GetMapping("/getUserByEmail/{email}")
-    public User getUserByEmail(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+        return ResponseEntity.ok(authResponse);
     }
 
     @PutMapping("/updateUser")
@@ -94,10 +70,8 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public void deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
+    @GetMapping("/getUserByEmail/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
     }
-
-
 }
