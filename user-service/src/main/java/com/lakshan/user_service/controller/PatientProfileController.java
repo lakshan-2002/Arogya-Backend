@@ -1,9 +1,14 @@
 package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.PatientProfile;
+import com.lakshan.user_service.models.PatientProfileRequest;
+import com.lakshan.user_service.models.PatientProfileResponse;
 import com.lakshan.user_service.service.PatientProfileService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +25,28 @@ public class PatientProfileController {
     }
 
     @PostMapping("/createPatientProfile")
-    public ResponseEntity<PatientProfile> createPatientProfile(@RequestBody PatientProfile patientProfile) {
-        patientProfileService.createNewPatientProfile(patientProfile);
-        return ResponseEntity.status(201).body(patientProfile);
-    }
+    public ResponseEntity<PatientProfileResponse> createPatientProfile(
+            @Valid @RequestBody PatientProfileRequest patientProfileRequest,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = userDetails.getUsername();
 
-    @GetMapping("/getPatientProfile/{id}")
-    public PatientProfile getPatientProfile(@PathVariable int id) {
-        return patientProfileService.getPatientProfileById(id);
+        patientProfileService.createNewPatientProfile(patientProfileRequest, email);
+
+        PatientProfileResponse patientProfileResponse = new PatientProfileResponse();
+        patientProfileResponse.setFirstName(patientProfileRequest.getFirstName());
+        patientProfileResponse.setLastName(patientProfileRequest.getLastName());
+        patientProfileResponse.setDateOfBirth(patientProfileRequest.getDateOfBirth());
+        patientProfileResponse.setPhoneNumber(patientProfileRequest.getPhoneNumber());
+        patientProfileResponse.setNicNumber(patientProfileRequest.getNicNumber());
+        patientProfileResponse.setAddress(patientProfileRequest.getAddress());
+        patientProfileResponse.setGender(patientProfileRequest.getGender());
+        patientProfileResponse.setBloodGroup(patientProfileRequest.getBloodGroup());
+        patientProfileResponse.setAllergies(patientProfileRequest.getAllergies());
+        patientProfileResponse.setChronicDiseases(patientProfileRequest.getChronicDiseases());
+        patientProfileResponse.setEmergencyContact(patientProfileRequest.getEmergencyContact());
+
+        return ResponseEntity.status(201).body(patientProfileResponse);
     }
 
     @GetMapping("/getAllPatientProfiles")
@@ -35,20 +54,34 @@ public class PatientProfileController {
         return patientProfileService.getAllPatientProfiles();
     }
 
-    @GetMapping("/getPatientProfileByUserId/{userId}")
-    public PatientProfile getPatientProfileByUserId(@PathVariable int userId) {
-        return patientProfileService.getPatientProfileByUserId(userId);
+    @GetMapping("/getPatientProfileByUserEmail")
+    public PatientProfile getPatientProfileByUserEmail(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return patientProfileService.getPatientProfileByUserEmail(email);
     }
 
     @PutMapping("/updatePatientProfile")
-    public ResponseEntity<PatientProfile> updatePatientProfile(@RequestBody PatientProfile patientProfile) {
-        patientProfileService.updatePatientProfile(patientProfile);
-        return ResponseEntity.ok(patientProfile);
-    }
+    public ResponseEntity<PatientProfileResponse> updatePatientProfile(
+            @Valid @RequestBody PatientProfileRequest patientProfileRequest,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = userDetails.getUsername();
 
-    @DeleteMapping("/deletePatientProfile/{id}")
-    public void deletePatientProfile(@PathVariable int id) {
-        patientProfileService.deletePatientProfile(id);
-    }
+        patientProfileService.updatePatientProfile(patientProfileRequest, email);
 
+        PatientProfileResponse patientProfileResponse = new PatientProfileResponse();
+        patientProfileResponse.setFirstName(patientProfileRequest.getFirstName());
+        patientProfileResponse.setLastName(patientProfileRequest.getLastName());
+        patientProfileResponse.setDateOfBirth(patientProfileRequest.getDateOfBirth());
+        patientProfileResponse.setPhoneNumber(patientProfileRequest.getPhoneNumber());
+        patientProfileResponse.setNicNumber(patientProfileRequest.getNicNumber());
+        patientProfileResponse.setAddress(patientProfileRequest.getAddress());
+        patientProfileResponse.setGender(patientProfileRequest.getGender());
+        patientProfileResponse.setBloodGroup(patientProfileRequest.getBloodGroup());
+        patientProfileResponse.setAllergies(patientProfileRequest.getAllergies());
+        patientProfileResponse.setChronicDiseases(patientProfileRequest.getChronicDiseases());
+        patientProfileResponse.setEmergencyContact(patientProfileRequest.getEmergencyContact());
+
+        return ResponseEntity.ok(patientProfileResponse);
+    }
 }

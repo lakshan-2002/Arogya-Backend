@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface TechnicianProfileRepository extends JpaRepository<TechnicianProfile, Integer> {
-    Optional<TechnicianProfile> findByUserId(int userId);
+    TechnicianProfile findByUserId(int userId);
+
+    Optional<TechnicianProfile> findByIdAndUserId(int id, int userId);
 }

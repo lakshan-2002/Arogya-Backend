@@ -1,9 +1,14 @@
 package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.AdminProfile;
+import com.lakshan.user_service.models.AdminProfileRequest;
+import com.lakshan.user_service.models.AdminProfileResponse;
 import com.lakshan.user_service.service.AdminProfileService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +25,22 @@ public class AdminProfileController {
     }
 
     @PostMapping("/createAdminProfile")
-    public ResponseEntity<AdminProfile> createAdminProfile(@RequestBody AdminProfile adminProfile) {
-        adminProfileService.createNewAdminProfile(adminProfile);
-        return ResponseEntity.status(201).body(adminProfile);
-    }
+    public ResponseEntity<AdminProfileResponse> createAdminProfile(
+            @Valid @RequestBody AdminProfileRequest adminProfileRequest,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = userDetails.getUsername();
 
-    @GetMapping("/getAdminProfile/{id}")
-    public AdminProfile getAdminProfile(@PathVariable int id) {
-        return adminProfileService.getAdminProfileById(id);
+        adminProfileService.createNewAdminProfile(adminProfileRequest, email);
+
+        AdminProfileResponse adminProfileResponse = new AdminProfileResponse();
+        adminProfileResponse.setFirstName(adminProfileRequest.getFirstName());
+        adminProfileResponse.setLastName(adminProfileRequest.getLastName());
+        adminProfileResponse.setDateOfBirth(adminProfileRequest.getDateOfBirth());
+        adminProfileResponse.setPhoneNumber(adminProfileRequest.getPhoneNumber());
+        adminProfileResponse.setNicNumber(adminProfileRequest.getNicNumber());
+
+        return ResponseEntity.status(201).body(adminProfileResponse);
     }
 
     @GetMapping("/getAllAdminProfiles")
@@ -35,19 +48,28 @@ public class AdminProfileController {
         return adminProfileService.getAllAdminProfiles();
     }
 
-    @GetMapping("/getAdminProfileByUserId/{userId}")
-    public AdminProfile getAdminProfileByUserId(@PathVariable int userId) {
-        return adminProfileService.getAdminProfileByUserId(userId);
+    @GetMapping("/getAdminProfileByUserEmail")
+    public AdminProfile getAdminProfileByUserEmail(@AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        return adminProfileService.getAdminProfileByUserEmail(email);
     }
 
     @PutMapping("/updateAdminProfile")
-    public ResponseEntity<AdminProfile> updateAdminProfile(@RequestBody AdminProfile adminProfile) {
-        adminProfileService.updateAdminProfile(adminProfile);
-        return ResponseEntity.ok(adminProfile);
-    }
+    public ResponseEntity<AdminProfileResponse> updateAdminProfile(
+            @Valid @RequestBody AdminProfileRequest adminProfileRequest,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        String email = userDetails.getUsername();
 
-    @DeleteMapping("/deleteAdminProfile/{id}")
-    public void deleteAdminProfile(@PathVariable int id) {
-        adminProfileService.deleteAdminProfile(id);
+        adminProfileService.updateAdminProfile(adminProfileRequest, email);
+
+        AdminProfileResponse adminProfileResponse = new AdminProfileResponse();
+        adminProfileResponse.setFirstName(adminProfileRequest.getFirstName());
+        adminProfileResponse.setLastName(adminProfileRequest.getLastName());
+        adminProfileResponse.setDateOfBirth(adminProfileRequest.getDateOfBirth());
+        adminProfileResponse.setPhoneNumber(adminProfileRequest.getPhoneNumber());
+        adminProfileResponse.setNicNumber(adminProfileRequest.getNicNumber());
+
+        return ResponseEntity.ok(adminProfileResponse);
     }
 }

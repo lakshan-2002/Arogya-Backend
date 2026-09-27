@@ -1,7 +1,11 @@
 package com.lakshan.user_service.service;
 
 import com.lakshan.user_service.entity.TechnicianProfile;
+import com.lakshan.user_service.exceptions.TechnicianProfileNotFoundException;
+import com.lakshan.user_service.exceptions.UserNotFoundException;
+import com.lakshan.user_service.models.TechnicianProfileRequest;
 import com.lakshan.user_service.repository.TechnicianProfileRepository;
+import com.lakshan.user_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,45 +15,73 @@ import java.util.List;
 public class TechnicianProfileService {
 
     private final TechnicianProfileRepository technicianProfileRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TechnicianProfileService(TechnicianProfileRepository technicianProfileRepository) {
+    public TechnicianProfileService(TechnicianProfileRepository technicianProfileRepository, UserRepository userRepository) {
         this.technicianProfileRepository = technicianProfileRepository;
+        this.userRepository = userRepository;
     }
 
-    public void createNewTechnicianProfile(TechnicianProfile technicianProfile) {
-        technicianProfileRepository.save(technicianProfile);
-    }
-
-    public TechnicianProfile getTechnicianProfileById(int id) {
-        return technicianProfileRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("Technician Profile not found with id: " + id)
+    public void createNewTechnicianProfile(TechnicianProfileRequest technicianProfileRequest, String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotFoundException("User not found with email: " + email)
         );
+
+        TechnicianProfile technicianProfile = new TechnicianProfile();
+        technicianProfile.setFirstName(technicianProfileRequest.getFirstName());
+        technicianProfile.setLastName(technicianProfileRequest.getLastName());
+        technicianProfile.setDateOfBirth(technicianProfileRequest.getDateOfBirth());
+        technicianProfile.setPhoneNumber(technicianProfileRequest.getPhoneNumber());
+        technicianProfile.setNicNumber(technicianProfileRequest.getNicNumber());
+        technicianProfile.setTechnicianField(technicianProfileRequest.getTechnicianField());
+        technicianProfile.setLicenseNumber(technicianProfileRequest.getLicenseNumber());
+        technicianProfile.setCertification(technicianProfileRequest.getCertification());
+        technicianProfile.setAssignedEquipment(technicianProfileRequest.getAssignedEquipment());
+        technicianProfile.setUser(user);
+
+        technicianProfileRepository.save(technicianProfile);
     }
 
     public List<TechnicianProfile> getAllTechnicianProfiles() {
         return technicianProfileRepository.findAll();
     }
 
-    public TechnicianProfile getTechnicianProfileByUserId(int userId) {
-        return technicianProfileRepository.findByUserId(userId).orElseThrow(() ->
-                new IllegalArgumentException("Technician Profile not found with user id: " + userId)
+    public TechnicianProfile getTechnicianProfileByUserEmail(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotFoundException("User not found with email: " + email)
         );
+
+        return technicianProfileRepository.findByUserId(user.getId());
     }
 
-    public void updateTechnicianProfile(TechnicianProfile technicianProfile) {
-        if (technicianProfileRepository.existsById(technicianProfile.getId()))
+    public void updateTechnicianProfile(TechnicianProfileRequest technicianProfileRequest, String email) {
+        if (technicianProfileRepository.existsById(technicianProfileRequest.getId())) {
+            var user = userRepository.findByEmail(email).orElseThrow(() ->
+                    new UserNotFoundException("User not found with email: " + email)
+            );
+
+            var technicianProfile = technicianProfileRepository.findByIdAndUserId(technicianProfileRequest.getId(), user.getId())
+                    .orElseThrow(() -> new TechnicianProfileNotFoundException(
+                            "Technician profile not found for user with email: " + email)
+                    );
+
+            technicianProfile.setFirstName(technicianProfileRequest.getFirstName());
+            technicianProfile.setLastName(technicianProfileRequest.getLastName());
+            technicianProfile.setDateOfBirth(technicianProfileRequest.getDateOfBirth());
+            technicianProfile.setPhoneNumber(technicianProfileRequest.getPhoneNumber());
+            technicianProfile.setNicNumber(technicianProfileRequest.getNicNumber());
+            technicianProfile.setTechnicianField(technicianProfileRequest.getTechnicianField());
+            technicianProfile.setLicenseNumber(technicianProfileRequest.getLicenseNumber());
+            technicianProfile.setCertification(technicianProfileRequest.getCertification());
+            technicianProfile.setAssignedEquipment(technicianProfileRequest.getAssignedEquipment());
+            technicianProfile.setUser(user);
+
             technicianProfileRepository.save(technicianProfile);
-        else
-            throw new IllegalArgumentException("Technician Profile not found with id: " + technicianProfile.getId());
+        } else {
+            throw new TechnicianProfileNotFoundException(
+                    "Technician profile not found with id: " + technicianProfileRequest.getId()
+            );
+        }
     }
-
-    public void deleteTechnicianProfile(int id) {
-        if (technicianProfileRepository.existsById(id))
-            technicianProfileRepository.deleteById(id);
-        else
-            throw new IllegalArgumentException("Technician Profile not found with id: " + id);
-    }
-
-
 }
