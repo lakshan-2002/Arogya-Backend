@@ -58,6 +58,62 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(AdminProfileNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAdminProfileNotFoundException(
+            AdminProfileNotFoundException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(DoctorProfileNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDoctorProfileNotFoundException(
+            DoctorProfileNotFoundException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(PatientProfileNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePatientProfileNotFoundException(
+            PatientProfileNotFoundException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(TechnicianProfileNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTechnicianProfileNotFoundException(
+            TechnicianProfileNotFoundException ex, HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
             IllegalArgumentException ex, HttpServletRequest request) {
