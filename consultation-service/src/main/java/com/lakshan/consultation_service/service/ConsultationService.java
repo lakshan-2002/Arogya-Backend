@@ -121,6 +121,19 @@ public class ConsultationService {
     }
 
     @Transactional
+    public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new IllegalArgumentException("Consultation not found");
+        }
+        repository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteMany(List<Long> ids) {
+        repository.deleteAllById(ids);
+    }
+
+    @Transactional
     public ConsultationDtos.Response complete(Long id) {
         Consultation c = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Consultation not found"));
         applyStatusTransition(c, Status.COMPLETED);

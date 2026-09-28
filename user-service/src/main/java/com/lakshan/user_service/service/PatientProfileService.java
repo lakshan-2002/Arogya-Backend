@@ -49,12 +49,24 @@ public class PatientProfileService {
         return patientProfileRepository.findAll();
     }
 
+    public PatientProfile getPatientProfileByUserId(int userId) {
+        PatientProfile profile = patientProfileRepository.findByUserId(userId);
+        if (profile == null) {
+            throw new PatientProfileNotFoundException("Patient profile not found for user id: " + userId);
+        }
+        return profile;
+    }
+
     public PatientProfile getPatientProfileByUserEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("User not found with email: " + email)
         );
 
-        return patientProfileRepository.findByUserId(user.getId());
+        PatientProfile profile = patientProfileRepository.findByUserId(user.getId());
+        if (profile == null) {
+            throw new PatientProfileNotFoundException("Patient profile not found for user with email: " + email);
+        }
+        return profile;
     }
 
     public void updatePatientProfile(PatientProfileRequest patientProfileRequest, String email) {

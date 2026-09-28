@@ -48,6 +48,11 @@ public class AdminProfileController {
         return adminProfileService.getAllAdminProfiles();
     }
 
+    @GetMapping("/getAdminProfileByUserId/{userId}")
+    public AdminProfile getAdminProfileByUserId(@PathVariable int userId) {
+        return adminProfileService.getAdminProfileByUserId(userId);
+    }
+
     @GetMapping("/getAdminProfileByUserEmail")
     public AdminProfile getAdminProfileByUserEmail(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();

@@ -51,12 +51,24 @@ public class DoctorProfileService {
         return doctorProfileRepository.findAllById(ids);
     }
 
+    public DoctorProfile getDoctorProfileByUserId(int userId) {
+        DoctorProfile profile = doctorProfileRepository.findByUserId(userId);
+        if (profile == null) {
+            throw new DoctorProfileNotFoundException("Doctor profile not found for user id: " + userId);
+        }
+        return profile;
+    }
+
     public DoctorProfile getDoctorProfileByUserEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("User not found with email: " + email)
         );
 
-        return doctorProfileRepository.findByUserId(user.getId());
+        DoctorProfile profile = doctorProfileRepository.findByUserId(user.getId());
+        if (profile == null) {
+            throw new DoctorProfileNotFoundException("Doctor profile not found for user with email: " + email);
+        }
+        return profile;
     }
 
     public void updateDoctorProfile(DoctorProfileRequest doctorProfileRequest, String email) {
