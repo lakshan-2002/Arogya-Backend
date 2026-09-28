@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -51,6 +53,7 @@ public class UserController {
         String token = jwtUtil.generateToken(dbUser.getEmail(), dbUser.getUserRole().getRoleName());
 
         AuthResponse authResponse = new AuthResponse();
+        authResponse.setId(dbUser.getId());
         authResponse.setToken(token);
         authResponse.setUsername(dbUser.getUsername());
         authResponse.setEmail(dbUser.getEmail());
@@ -73,5 +76,15 @@ public class UserController {
     @GetMapping("/getUserByEmail/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/getAllUsers")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/getUser/{id}")
+    public User getUser(@PathVariable int id) {
+        return userService.getUserById(id);
     }
 }

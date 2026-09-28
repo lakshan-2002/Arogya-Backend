@@ -52,6 +52,11 @@ public class TechnicianProfileController {
         return technicianProfileService.getAllTechnicianProfiles();
     }
 
+    @GetMapping("/getTechnicianProfileByUserId/{userId}")
+    public TechnicianProfile getTechnicianProfileByUserId(@PathVariable int userId) {
+        return technicianProfileService.getTechnicianProfileByUserId(userId);
+    }
+
     @GetMapping("/getTechnicianProfileByUserEmail")
     public TechnicianProfile getTechnicianProfileByUserEmail(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();

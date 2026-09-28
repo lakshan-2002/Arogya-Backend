@@ -43,12 +43,24 @@ public class AdminProfileService {
         return adminProfileRepository.findAll();
     }
 
+    public AdminProfile getAdminProfileByUserId(int userId) {
+        AdminProfile profile = adminProfileRepository.findByUserId(userId);
+        if (profile == null) {
+            throw new AdminProfileNotFoundException("Admin profile not found for user id: " + userId);
+        }
+        return profile;
+    }
+
     public AdminProfile getAdminProfileByUserEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("User not found with email: " + email)
         );
 
-        return adminProfileRepository.findByUserId(user.getId());
+        AdminProfile profile = adminProfileRepository.findByUserId(user.getId());
+        if (profile == null) {
+            throw new AdminProfileNotFoundException("Admin profile not found for user with email: " + email);
+        }
+        return profile;
     }
 
     public void updateAdminProfile(AdminProfileRequest adminProfileRequest, String email) {

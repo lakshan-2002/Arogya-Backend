@@ -58,6 +58,18 @@ public class ConsultationController {
         return ResponseEntity.ok(service.update(id, req));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/bulk-delete")
+    public ResponseEntity<Void> bulkDelete(@RequestBody java.util.List<Long> ids) {
+        service.deleteMany(ids);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{id}/cancel")
     public ResponseEntity<ConsultationDtos.Response> cancel(@PathVariable Long id) {
         return ResponseEntity.ok(service.cancel(id));

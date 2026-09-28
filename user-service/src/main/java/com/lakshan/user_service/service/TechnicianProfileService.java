@@ -47,12 +47,24 @@ public class TechnicianProfileService {
         return technicianProfileRepository.findAll();
     }
 
+    public TechnicianProfile getTechnicianProfileByUserId(int userId) {
+        TechnicianProfile profile = technicianProfileRepository.findByUserId(userId);
+        if (profile == null) {
+            throw new TechnicianProfileNotFoundException("Technician profile not found for user id: " + userId);
+        }
+        return profile;
+    }
+
     public TechnicianProfile getTechnicianProfileByUserEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("User not found with email: " + email)
         );
 
-        return technicianProfileRepository.findByUserId(user.getId());
+        TechnicianProfile profile = technicianProfileRepository.findByUserId(user.getId());
+        if (profile == null) {
+            throw new TechnicianProfileNotFoundException("Technician profile not found for user with email: " + email);
+        }
+        return profile;
     }
 
     public void updateTechnicianProfile(TechnicianProfileRequest technicianProfileRequest, String email) {

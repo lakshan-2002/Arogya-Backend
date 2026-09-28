@@ -54,6 +54,11 @@ public class PatientProfileController {
         return patientProfileService.getAllPatientProfiles();
     }
 
+    @GetMapping("/getPatientProfileByUserId/{userId}")
+    public PatientProfile getPatientProfileByUserId(@PathVariable int userId) {
+        return patientProfileService.getPatientProfileByUserId(userId);
+    }
+
     @GetMapping("/getPatientProfileByUserEmail")
     public PatientProfile getPatientProfileByUserEmail(@AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername();

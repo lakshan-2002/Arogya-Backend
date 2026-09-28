@@ -9,10 +9,19 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AuthResponse implements Serializable {
 
+    private int id;
     private String token;
     private String username;
     private String email;
     private String role;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getToken() {
         return token;
@@ -49,7 +58,8 @@ public class AuthResponse implements Serializable {
     @Override
     public String toString() {
         return "AuthResponse{" +
-                "token='" + token + '\'' +
+                "id=" + id +
+                ", token='" + token + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +
