@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service.repository;
+package com.lakshan.consultation_service.repository;
 
 import com.lakshan.consultation_service.domain.Consultation;
 import com.lakshan.consultation_service.domain.Consultation.Status;

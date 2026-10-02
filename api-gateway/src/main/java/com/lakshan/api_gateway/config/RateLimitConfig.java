@@ -1,4 +1,4 @@
-﻿package com.lakshan.api_gateway.config;
+package com.lakshan.api_gateway.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;

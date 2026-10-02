@@ -1,4 +1,4 @@
-﻿package com.lakshan.clinic_service.repository;
+package com.lakshan.clinic_service.repository;
 
 import com.lakshan.clinic_service.entity.Clinic;
 import org.springframework.data.jpa.repository.JpaRepository;

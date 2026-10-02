@@ -1,4 +1,4 @@
-﻿package com.lakshan.queue_service.dto;
+package com.lakshan.queue_service.dto;
 
 public class QueueTokenCreateRequest {
 

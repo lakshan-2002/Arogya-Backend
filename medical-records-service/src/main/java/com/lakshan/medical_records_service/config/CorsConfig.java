@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.config;
+package com.lakshan.medical_records_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

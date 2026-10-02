@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service.config;
+package com.lakshan.consultation_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

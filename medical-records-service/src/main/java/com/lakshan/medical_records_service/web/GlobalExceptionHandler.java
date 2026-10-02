@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.web;
+package com.lakshan.medical_records_service.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

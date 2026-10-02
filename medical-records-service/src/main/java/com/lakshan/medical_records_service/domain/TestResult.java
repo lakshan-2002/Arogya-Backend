@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.domain;
+package com.lakshan.medical_records_service.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service.dto;
+package com.lakshan.consultation_service.dto;
 
 import com.lakshan.consultation_service.domain.Consultation.Status;
 import jakarta.validation.constraints.Min;

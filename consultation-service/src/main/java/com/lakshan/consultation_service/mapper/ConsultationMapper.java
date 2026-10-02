@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service.mapper;
+package com.lakshan.consultation_service.mapper;
 
 import com.lakshan.consultation_service.domain.Consultation;
 import com.lakshan.consultation_service.dto.ConsultationDtos;
