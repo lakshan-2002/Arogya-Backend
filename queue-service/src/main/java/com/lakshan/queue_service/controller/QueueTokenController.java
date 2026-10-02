@@ -1,4 +1,4 @@
-﻿package com.lakshan.queue_service.controller;
+package com.lakshan.queue_service.controller;
 
 import com.lakshan.queue_service.dto.QueueTokenCreateRequest;
 import com.lakshan.queue_service.dto.QueueTokenResponse;

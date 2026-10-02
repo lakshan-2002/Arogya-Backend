@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.service;
+package com.lakshan.medical_records_service.service;
 
 import com.lakshan.medical_records_service.client.ConsultationClient;
 import com.lakshan.medical_records_service.domain.TestResult;

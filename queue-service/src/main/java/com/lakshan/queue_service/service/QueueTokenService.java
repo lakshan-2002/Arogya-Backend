@@ -1,4 +1,4 @@
-﻿package com.lakshan.queue_service.service;
+package com.lakshan.queue_service.service;
 
 import com.lakshan.queue_service.client.ClinicServiceClient;
 import com.lakshan.queue_service.client.UserServiceClient;

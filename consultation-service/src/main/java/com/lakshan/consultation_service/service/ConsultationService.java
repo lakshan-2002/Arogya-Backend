@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service.service;
+package com.lakshan.consultation_service.service;
 
 import com.lakshan.consultation_service.client.ClinicClient;
 import com.lakshan.consultation_service.client.QueueClient;

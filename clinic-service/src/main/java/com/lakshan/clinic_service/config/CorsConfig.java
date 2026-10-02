@@ -1,4 +1,4 @@
-﻿package com.lakshan.clinic_service.config;
+package com.lakshan.clinic_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

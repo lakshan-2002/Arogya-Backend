@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.dto;
+package com.lakshan.medical_records_service.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

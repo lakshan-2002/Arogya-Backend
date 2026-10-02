@@ -1,4 +1,4 @@
-﻿package com.lakshan.user_service.entity;
+package com.lakshan.user_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-﻿package com.lakshan.clinic_service.entity;
+package com.lakshan.clinic_service.entity;
 
 import jakarta.persistence.*;
 

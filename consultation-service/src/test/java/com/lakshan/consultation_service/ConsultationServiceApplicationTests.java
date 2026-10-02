@@ -1,4 +1,4 @@
-﻿package com.lakshan.consultation_service;
+package com.lakshan.consultation_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

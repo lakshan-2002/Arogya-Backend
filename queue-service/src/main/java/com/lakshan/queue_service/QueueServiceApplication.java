@@ -1,4 +1,4 @@
-﻿package com.lakshan.queue_service;
+package com.lakshan.queue_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-﻿package com.lakshan.config_service;
+package com.lakshan.config_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

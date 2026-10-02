@@ -1,4 +1,4 @@
-﻿package com.lakshan.medical_records_service.web;
+package com.lakshan.medical_records_service.web;
 
 import com.lakshan.medical_records_service.dto.TestResultDtos;
 import com.lakshan.medical_records_service.service.TestResultService;

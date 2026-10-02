@@ -1,4 +1,4 @@
-﻿package com.lakshan.clinic_service.service;
+package com.lakshan.clinic_service.service;
 
 
 import com.lakshan.clinic_service.entity.ClinicDoctors;

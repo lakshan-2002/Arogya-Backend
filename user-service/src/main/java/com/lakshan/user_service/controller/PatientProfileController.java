@@ -1,4 +1,4 @@
-﻿package com.lakshan.user_service.controller;
+package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.PatientProfile;
 import com.lakshan.user_service.service.PatientProfileService;

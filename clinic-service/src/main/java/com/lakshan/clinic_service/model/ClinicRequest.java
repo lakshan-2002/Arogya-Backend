@@ -1,4 +1,4 @@
-﻿package com.lakshan.clinic_service.model;
+package com.lakshan.clinic_service.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
