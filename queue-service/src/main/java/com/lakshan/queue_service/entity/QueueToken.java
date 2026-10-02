@@ -1,4 +1,4 @@
-package com.lakshan.queue_service.entity;
+﻿package com.lakshan.queue_service.entity;
 
 import jakarta.persistence.*;
 

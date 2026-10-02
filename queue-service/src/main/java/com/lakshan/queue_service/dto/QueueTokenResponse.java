@@ -1,4 +1,4 @@
-package com.lakshan.queue_service.dto;
+﻿package com.lakshan.queue_service.dto;
 
 import com.lakshan.queue_service.entity.QueueTokenStatus;
 

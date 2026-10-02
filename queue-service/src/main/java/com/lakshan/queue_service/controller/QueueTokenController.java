@@ -1,4 +1,4 @@
-package com.lakshan.queue_service.controller;
+﻿package com.lakshan.queue_service.controller;
 
 import com.lakshan.queue_service.dto.QueueTokenCreateRequest;
 import com.lakshan.queue_service.dto.QueueTokenResponse;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/queue")
-@CrossOrigin(origins = "http://129.146.3.119:5173")
+@CrossOrigin(origins = "http://129.146.3.119")
 public class QueueTokenController {
 
     private final QueueTokenService queueTokenService;

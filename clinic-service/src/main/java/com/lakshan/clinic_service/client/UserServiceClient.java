@@ -1,4 +1,4 @@
-package com.lakshan.clinic_service.client;
+﻿package com.lakshan.clinic_service.client;
 
 import com.lakshan.clinic_service.model.DoctorProfileDTO;
 import org.springframework.cloud.openfeign.FeignClient;

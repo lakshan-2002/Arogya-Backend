@@ -1,4 +1,4 @@
-package com.lakshan.user_service.entity;
+﻿package com.lakshan.user_service.entity;
 
 import jakarta.persistence.*;
 

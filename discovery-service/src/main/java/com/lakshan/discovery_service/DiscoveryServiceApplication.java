@@ -1,4 +1,4 @@
-package com.lakshan.discovery_service;
+﻿package com.lakshan.discovery_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

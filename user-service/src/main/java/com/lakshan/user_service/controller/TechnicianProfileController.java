@@ -1,4 +1,4 @@
-package com.lakshan.user_service.controller;
+﻿package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.TechnicianProfile;
 import com.lakshan.user_service.service.TechnicianProfileService;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/technician_profile")
-@CrossOrigin(origins = "http://129.146.3.119:5173")
+@CrossOrigin(origins = "http://129.146.3.119")
 public class TechnicianProfileController {
 
     private final TechnicianProfileService technicianProfileService;

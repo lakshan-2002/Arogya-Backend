@@ -1,4 +1,4 @@
-package com.lakshan.consultation_service.client;
+﻿package com.lakshan.consultation_service.client;
 
 import org.springframework.stereotype.Component;
 

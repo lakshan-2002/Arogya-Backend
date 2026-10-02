@@ -1,4 +1,4 @@
-package com.lakshan.queue_service.client;
+﻿package com.lakshan.queue_service.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

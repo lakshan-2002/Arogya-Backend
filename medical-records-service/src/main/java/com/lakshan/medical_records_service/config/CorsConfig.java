@@ -1,4 +1,4 @@
-package com.lakshan.medical_records_service.config;
+﻿package com.lakshan.medical_records_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class CorsConfig {
         config.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:*",
             "http://127.0.0.1:*",
-            "http://129.146.3.119:5173",
+            "http://129.146.3.119",
             "http://localhost:3000"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

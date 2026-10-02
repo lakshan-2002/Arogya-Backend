@@ -1,4 +1,4 @@
-package com.lakshan.clinic_service;
+﻿package com.lakshan.clinic_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
