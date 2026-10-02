@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = {"http://129.146.3.119", "http://129.146.3.119"})
+@CrossOrigin(origins = {"https://arogya-mobile-clinic.me", "https://arogya-mobile-clinic.me"})
 public class UserController {
 
     private final UserService userService;

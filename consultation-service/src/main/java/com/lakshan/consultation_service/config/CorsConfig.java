@@ -23,7 +23,7 @@ public class CorsConfig {
         config.setAllowedOriginPatterns(Arrays.asList(
             "http://localhost:*",
             "http://127.0.0.1:*",
-            "http://129.146.3.119",
+            "https://arogya-mobile-clinic.me",
             "http://localhost:3000"
         ));
         

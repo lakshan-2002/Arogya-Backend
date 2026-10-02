@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clinics")
-@CrossOrigin(origins = "http://129.146.3.119")
+@CrossOrigin(origins = "https://arogya-mobile-clinic.me")
 public class ClinicController {
 
     private final ClinicService clinicService;
