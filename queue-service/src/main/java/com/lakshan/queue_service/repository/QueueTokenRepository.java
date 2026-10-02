@@ -1,4 +1,4 @@
-package com.lakshan.queue_service.repository;
+﻿package com.lakshan.queue_service.repository;
 
 import com.lakshan.queue_service.entity.QueueToken;
 import com.lakshan.queue_service.entity.QueueTokenStatus;

@@ -1,4 +1,4 @@
-package com.lakshan.notification_service;
+﻿package com.lakshan.notification_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

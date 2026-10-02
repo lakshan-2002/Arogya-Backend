@@ -1,4 +1,4 @@
-package com.lakshan.user_service.repository;
+﻿package com.lakshan.user_service.repository;
 
 import com.lakshan.user_service.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;

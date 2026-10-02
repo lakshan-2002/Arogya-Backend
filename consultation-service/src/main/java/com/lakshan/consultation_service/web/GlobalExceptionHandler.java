@@ -1,4 +1,4 @@
-package com.lakshan.consultation_service.web;
+﻿package com.lakshan.consultation_service.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

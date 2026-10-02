@@ -1,4 +1,4 @@
-package com.lakshan.clinic_service.controller;
+﻿package com.lakshan.clinic_service.controller;
 
 import com.lakshan.clinic_service.entity.ClinicDoctors;
 import com.lakshan.clinic_service.service.ClinicDoctorsService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clinic_doctors")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://129.146.3.119:5173")
 public class ClinicDoctorsController {
 
     private final ClinicDoctorsService clinicDoctorsService;

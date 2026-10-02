@@ -1,4 +1,4 @@
-package com.lakshan.user_service.controller;
+﻿package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.UserRole;
 import com.lakshan.user_service.service.UserRoleService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/roles")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://129.146.3.119:5173")
 public class UserRoleController {
 
     private final UserRoleService userRoleService;

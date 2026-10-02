@@ -1,4 +1,4 @@
-package com.lakshan.user_service.controller;
+﻿package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.AdminProfile;
 import com.lakshan.user_service.service.AdminProfileService;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin_profile")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://129.146.3.119:5173")
 public class AdminProfileController {
 
     private final AdminProfileService adminProfileService;

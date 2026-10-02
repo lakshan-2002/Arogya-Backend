@@ -1,4 +1,4 @@
-package com.lakshan.user_service.controller;
+﻿package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.User;
 import com.lakshan.user_service.models.UserRequest;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174"})
+@CrossOrigin(origins = {"http://129.146.3.119:5173", "http://129.146.3.119:5173"})
 public class UserController {
 
     private final UserService userService;
