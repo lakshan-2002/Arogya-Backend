@@ -2,9 +2,12 @@ server:
   port: 8090
 
 jwt:
-  secret: xd0Ykn1GQQi/hW38WDVmZUGpwP1iHa596d4IzoLAbas5gPV96lSQFFAm6WQFatR9
+  secret: ${JWT_Secret_Key}
 
 spring:
+  config:
+    import: optional:file:.env[.properties],optional:file:../.env[.properties]
+
   application:
     name: API-GATEWAY
 
