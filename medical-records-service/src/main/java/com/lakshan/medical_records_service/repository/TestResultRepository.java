@@ -15,5 +15,6 @@ public interface TestResultRepository extends JpaRepository<TestResult, Long> {
     List<TestResult> findByPatientId(Long patientId);
     Page<TestResult> findByPatientId(Long patientId, Pageable pageable);
     List<TestResult> findByTechnicianId(Long technicianId);
+    Page<TestResult> findByTechnicianId(Long technicianId, Pageable pageable);
     boolean existsByLabTestId(Long labTestId);
 }

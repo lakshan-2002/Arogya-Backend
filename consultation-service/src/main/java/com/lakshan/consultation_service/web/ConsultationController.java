@@ -29,7 +29,7 @@ public class ConsultationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ConsultationDtos.Response> get(@PathVariable Long id) {
+    public ResponseEntity<ConsultationDtos.Response> get(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.get(id));
     }
     

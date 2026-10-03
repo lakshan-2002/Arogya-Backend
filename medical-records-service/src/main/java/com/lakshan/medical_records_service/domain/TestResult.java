@@ -2,6 +2,8 @@ package com.lakshan.medical_records_service.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "test_results", indexes = {
@@ -31,17 +33,8 @@ public class TestResult {
     @Column(name = "technician_notes", columnDefinition = "TEXT")
     private String technicianNotes;
 
-    @Column(name = "file_path", length = 500)
-    private String filePath;
-
-    @Column(name = "file_name", length = 255)
-    private String fileName;
-
-    @Column(name = "file_type", length = 50)
-    private String fileType;
-
-    @Column(name = "file_size")
-    private Long fileSize;
+    @OneToMany(mappedBy = "testResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TestResultFile> files = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -73,17 +66,8 @@ public class TestResult {
     public String getTechnicianNotes() { return technicianNotes; }
     public void setTechnicianNotes(String technicianNotes) { this.technicianNotes = technicianNotes; }
 
-    public String getFilePath() { return filePath; }
-    public void setFilePath(String filePath) { this.filePath = filePath; }
-
-    public String getFileName() { return fileName; }
-    public void setFileName(String fileName) { this.fileName = fileName; }
-
-    public String getFileType() { return fileType; }
-    public void setFileType(String fileType) { this.fileType = fileType; }
-
-    public Long getFileSize() { return fileSize; }
-    public void setFileSize(Long fileSize) { this.fileSize = fileSize; }
+    public List<TestResultFile> getFiles() { return files; }
+    public void setFiles(List<TestResultFile> files) { this.files = files; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

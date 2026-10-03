@@ -53,7 +53,7 @@ public class TechnicianProfileController {
     }
 
     @GetMapping("/getTechnicianProfileByUserId/{userId}")
-    public TechnicianProfile getTechnicianProfileByUserId(@PathVariable int userId) {
+    public TechnicianProfile getTechnicianProfileByUserId(@PathVariable("userId") int userId) {
         return technicianProfileService.getTechnicianProfileByUserId(userId);
     }
 

@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 public interface ConsultationClient {
 
     @PutMapping("/lab-tests/{id}/technician-update")
-    void updateLabTestStatus(@PathVariable Long id, @RequestBody StatusUpdateRequest request);
+    void updateLabTestStatus(@PathVariable("id") Long id, @RequestBody StatusUpdateRequest request);
 
     @PostMapping("/lab-tests/{id}/start")
-    void startLabTest(@PathVariable Long id);
+    void startLabTest(@PathVariable("id") Long id);
 
     record StatusUpdateRequest(String status, String testResults, String technicianNotes) {}
 }

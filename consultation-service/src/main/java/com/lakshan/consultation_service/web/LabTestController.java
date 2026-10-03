@@ -54,14 +54,14 @@ public class LabTestController {
      */
     @GetMapping
     public ResponseEntity<Page<LabTestDtos.Response>> listTests(
-            @RequestParam(required = false) TestStatus status,
-            @RequestParam(required = false) Long technicianId,
-            @RequestParam(required = false) LocalDateTime start,
-            @RequestParam(required = false) LocalDateTime end,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "DESC") String sortDir
+            @RequestParam(value = "status", required = false) TestStatus status,
+            @RequestParam(value = "technicianId", required = false) Long technicianId,
+            @RequestParam(value = "start", required = false) LocalDateTime start,
+            @RequestParam(value = "end", required = false) LocalDateTime end,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir
     ) {
         Sort sort = sortDir.equalsIgnoreCase("ASC") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -111,7 +111,7 @@ public class LabTestController {
      */
     @PutMapping("/{id}/technician-update")
     public ResponseEntity<LabTestDtos.Response> updateByTechnician(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestBody LabTestDtos.TechnicianUpdateRequest req) {
         return ResponseEntity.ok(service.updateTestByTechnician(id, req));
     }
@@ -121,8 +121,8 @@ public class LabTestController {
      */
     @PostMapping("/{id}/assign")
     public ResponseEntity<LabTestDtos.Response> assignToTechnician(
-            @PathVariable Long id,
-            @RequestParam Long technicianId) {
+            @PathVariable("id") Long id,
+            @RequestParam("technicianId") Long technicianId) {
         LabTestDtos.UpdateRequest req = new LabTestDtos.UpdateRequest(
                 null, null, null, technicianId, null, null
         );
@@ -133,7 +133,7 @@ public class LabTestController {
      * Start a test (change status to IN_PROGRESS)
      */
     @PostMapping("/{id}/start")
-    public ResponseEntity<LabTestDtos.Response> startTest(@PathVariable Long id) {
+    public ResponseEntity<LabTestDtos.Response> startTest(@PathVariable("id") Long id) {
         LabTestDtos.TechnicianUpdateRequest req = new LabTestDtos.TechnicianUpdateRequest(
                 TestStatus.IN_PROGRESS, null, null
         );

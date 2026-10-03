@@ -47,6 +47,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/users/addUser", "/users/login").permitAll() // Public endpoints
+                        // Internal service-to-service lookups (Feign calls from queue-service,
+                        // clinic-service, etc. carry no user JWT, so these must stay open;
+                        // real clients only reach them through the gateway, which enforces JWT).
+                        .requestMatchers("/users/getUser/*", "/doctor_profile/bulk").permitAll()
                         .anyRequest().authenticated() // All other endpoints require authentication
                 )
                 .sessionManagement(session -> session

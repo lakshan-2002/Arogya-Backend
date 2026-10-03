@@ -55,7 +55,7 @@ public class PatientProfileController {
     }
 
     @GetMapping("/getPatientProfileByUserId/{userId}")
-    public PatientProfile getPatientProfileByUserId(@PathVariable int userId) {
+    public PatientProfile getPatientProfileByUserId(@PathVariable("userId") int userId) {
         return patientProfileService.getPatientProfileByUserId(userId);
     }
 
