@@ -1,5 +1,6 @@
 package com.lakshan.medical_records_service.web;
 
+import com.lakshan.medical_records_service.exception.ForbiddenException;
 import com.lakshan.medical_records_service.exception.TestResultNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -25,6 +26,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TestResultNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(TestResultNotFoundException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Map<String, Object>> handleForbidden(ForbiddenException ex) {
+        log.warn("Access denied: {}", ex.getMessage());
+        return buildResponse(HttpStatus.FORBIDDEN, "Forbidden", ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
