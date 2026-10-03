@@ -36,6 +36,8 @@ public class TestResultController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TestResultDtos.Response> createTestResult(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @RequestParam("labTestId") @NotNull @Positive Long labTestId,
             @RequestParam("patientId") @NotNull @Positive Long patientId,
             @RequestParam("technicianId") @NotNull @Positive Long technicianId,
@@ -46,26 +48,37 @@ public class TestResultController {
         TestResultDtos.CreateRequest req = new TestResultDtos.CreateRequest(
                 labTestId, patientId, technicianId, testResultDescription, technicianNotes
         );
-        return ResponseEntity.ok(service.createTestResult(req, files));
+        return ResponseEntity.ok(service.createTestResult(requester(callerEmail, callerRole), req, files));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TestResultDtos.Response> getTestResult(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.getTestResult(id));
+    public ResponseEntity<TestResultDtos.Response> getTestResult(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.getTestResult(requester(callerEmail, callerRole), id));
     }
 
     @GetMapping("/lab-test/{labTestId}")
-    public ResponseEntity<TestResultDtos.Response> getTestResultByLabTest(@PathVariable("labTestId") Long labTestId) {
-        return ResponseEntity.ok(service.getTestResultByLabTestId(labTestId));
+    public ResponseEntity<TestResultDtos.Response> getTestResultByLabTest(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("labTestId") Long labTestId) {
+        return ResponseEntity.ok(service.getTestResultByLabTestId(requester(callerEmail, callerRole), labTestId));
     }
 
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<TestResultDtos.Response>> getTestResultsByPatient(@PathVariable("patientId") Long patientId) {
-        return ResponseEntity.ok(service.getTestResultsByPatient(patientId));
+    public ResponseEntity<List<TestResultDtos.Response>> getTestResultsByPatient(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("patientId") Long patientId) {
+        return ResponseEntity.ok(service.getTestResultsByPatient(requester(callerEmail, callerRole), patientId));
     }
 
     @GetMapping("/patient/{patientId}/paged")
     public ResponseEntity<Page<TestResultDtos.Response>> getTestResultsByPatientPaged(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @PathVariable("patientId") Long patientId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
@@ -73,16 +86,21 @@ public class TestResultController {
             @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir) {
 
         Pageable pageable = buildPageable(page, size, sortBy, sortDir);
-        return ResponseEntity.ok(service.getTestResultsByPatientPaged(patientId, pageable));
+        return ResponseEntity.ok(service.getTestResultsByPatientPaged(requester(callerEmail, callerRole), patientId, pageable));
     }
 
     @GetMapping("/technician/{technicianId}")
-    public ResponseEntity<List<TestResultDtos.Response>> getTestResultsByTechnician(@PathVariable("technicianId") Long technicianId) {
-        return ResponseEntity.ok(service.getTestResultsByTechnician(technicianId));
+    public ResponseEntity<List<TestResultDtos.Response>> getTestResultsByTechnician(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("technicianId") Long technicianId) {
+        return ResponseEntity.ok(service.getTestResultsByTechnician(requester(callerEmail, callerRole), technicianId));
     }
 
     @GetMapping("/technician/{technicianId}/paged")
     public ResponseEntity<Page<TestResultDtos.Response>> getTestResultsByTechnicianPaged(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @PathVariable("technicianId") Long technicianId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
@@ -90,12 +108,15 @@ public class TestResultController {
             @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir) {
 
         Pageable pageable = buildPageable(page, size, sortBy, sortDir);
-        return ResponseEntity.ok(service.getTestResultsByTechnicianPaged(technicianId, pageable));
+        return ResponseEntity.ok(service.getTestResultsByTechnicianPaged(requester(callerEmail, callerRole), technicianId, pageable));
     }
 
     @GetMapping("/{id}/files/{fileId}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable("id") Long id, @PathVariable("fileId") Long fileId) {
-        TestResultService.TestResultFileDownload download = service.downloadFile(id, fileId);
+    public ResponseEntity<byte[]> downloadFile(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("id") Long id, @PathVariable("fileId") Long fileId) {
+        TestResultService.TestResultFileDownload download = service.downloadFile(requester(callerEmail, callerRole), id, fileId);
 
         ContentDisposition disposition = ContentDisposition.attachment()
                 .filename(sanitizeFilename(download.fileName()), StandardCharsets.UTF_8)
@@ -109,47 +130,63 @@ public class TestResultController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TestResultDtos.Response> updateTestResult(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @PathVariable("id") Long id,
             @RequestParam(value = "testResultDescription", required = false) @Size(max = 4000) String testResultDescription,
             @RequestParam(value = "technicianNotes", required = false) @Size(max = 4000) String technicianNotes,
             @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "removeFileIds", required = false) List<Long> removeFileIds) {
 
-        return ResponseEntity.ok(service.updateTestResult(id, testResultDescription, technicianNotes, files, removeFileIds));
+        return ResponseEntity.ok(service.updateTestResult(requester(callerEmail, callerRole), id, testResultDescription, technicianNotes, files, removeFileIds));
     }
 
     @PostMapping(value = "/{id}/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<TestResultDtos.Response> updateTestResultPost(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @PathVariable("id") Long id,
             @RequestParam(value = "testResultDescription", required = false) @Size(max = 4000) String testResultDescription,
             @RequestParam(value = "technicianNotes", required = false) @Size(max = 4000) String technicianNotes,
             @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "removeFileIds", required = false) List<Long> removeFileIds) {
 
-        return ResponseEntity.ok(service.updateTestResult(id, testResultDescription, technicianNotes, files, removeFileIds));
+        return ResponseEntity.ok(service.updateTestResult(requester(callerEmail, callerRole), id, testResultDescription, technicianNotes, files, removeFileIds));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTestResult(@PathVariable("id") Long id) {
-        service.deleteTestResult(id);
+    public ResponseEntity<Void> deleteTestResult(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("id") Long id) {
+        service.deleteTestResult(requester(callerEmail, callerRole), id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/delete")
-    public ResponseEntity<Void> deleteTestResultPost(@PathVariable("id") Long id) {
-        service.deleteTestResult(id);
+    public ResponseEntity<Void> deleteTestResultPost(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
+            @PathVariable("id") Long id) {
+        service.deleteTestResult(requester(callerEmail, callerRole), id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<Page<TestResultDtos.Response>> getAllTestResults(
+            @RequestHeader(value = "X-User-Email", required = false) String callerEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String callerRole,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size,
             @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
             @RequestParam(value = "sortDir", defaultValue = "DESC") String sortDir) {
 
         Pageable pageable = buildPageable(page, size, sortBy, sortDir);
-        return ResponseEntity.ok(service.getAllTestResults(pageable));
+        return ResponseEntity.ok(service.getAllTestResults(requester(callerEmail, callerRole), pageable));
+    }
+
+    private TestResultService.RequesterContext requester(String callerEmail, String callerRole) {
+        return new TestResultService.RequesterContext(callerEmail, callerRole);
     }
 
     private Pageable buildPageable(int page, int size, String sortBy, String sortDir) {
