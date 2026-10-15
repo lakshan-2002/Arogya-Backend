@@ -44,6 +44,7 @@ spring:
                 - Path=/roles/**, /users/**, /admin_profile/**, /doctor_profile/**,
                   /patient_profile/**, /technician_profile/**
               filters:
+              - name: JwtAuthentication
               - name: RequestRateLimiter
                 args:
                   redis-rate-limiter.replenishRate: 2
