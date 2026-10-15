@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,9 +47,12 @@ public class PasswordResetService {
     public ApiResponse sendOtp(String email) {
         String cleanEmail = email.trim().toLowerCase();
 
-        // Check if user exists
-        User user = userRepository.findByEmail(cleanEmail)
-                .orElseThrow(() -> new UserNotFoundException("No account registered with email: " + email));
+        // Check if user exists (generic response returned to prevent user enumeration)
+        Optional<User> userOptional = userRepository.findByEmail(cleanEmail);
+        if (userOptional.isEmpty()) {
+            log.warn("Password reset requested for non-existent email: {}", cleanEmail);
+            return ApiResponse.ok("If an account with that email exists, a verification code has been sent.");
+        }
 
         // Generate 6-digit OTP (100000 - 999999)
         String otp = String.format("%06d", secureRandom.nextInt(1_000_000));
@@ -66,7 +70,7 @@ public class PasswordResetService {
         // Send HTML email with OTP
         emailService.sendPasswordResetOtp(cleanEmail, otp);
 
-        return ApiResponse.ok("Verification code sent to " + email + ". Please check your inbox.");
+        return ApiResponse.ok("If an account with that email exists, a verification code has been sent.");
     }
 
     @Transactional
