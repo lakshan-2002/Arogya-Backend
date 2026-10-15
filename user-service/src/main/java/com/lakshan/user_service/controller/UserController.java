@@ -2,10 +2,9 @@ package com.lakshan.user_service.controller;
 
 import com.lakshan.user_service.entity.User;
 import com.lakshan.user_service.exceptions.InvalidCredentialsException;
-import com.lakshan.user_service.models.AuthResponse;
-import com.lakshan.user_service.models.UserRequest;
-import com.lakshan.user_service.models.UserResponse;
+import com.lakshan.user_service.models.*;
 import com.lakshan.user_service.security.JwtUtil;
+import com.lakshan.user_service.service.PasswordResetService;
 import com.lakshan.user_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,19 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final PasswordResetService passwordResetService;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UserController(
+            UserService userService,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil,
+            PasswordResetService passwordResetService
+    ) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.passwordResetService = passwordResetService;
     }
 
     @PostMapping("/addUser")
@@ -60,6 +66,28 @@ public class UserController {
         authResponse.setRole(dbUser.getUserRole().getRoleName());
 
         return ResponseEntity.ok(authResponse);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        ApiResponse response = passwordResetService.sendOtp(request.getEmail());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<VerifyOtpResponse> verifyOtp(@Valid @RequestBody VerifyOtpRequest request) {
+        VerifyOtpResponse response = passwordResetService.verifyOtp(request.getEmail(), request.getOtp());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        ApiResponse response = passwordResetService.resetPassword(
+                request.getEmail(),
+                request.getResetToken(),
+                request.getNewPassword()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/updateUser")
