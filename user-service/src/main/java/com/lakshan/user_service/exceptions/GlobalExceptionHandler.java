@@ -2,6 +2,8 @@ package com.lakshan.user_service.exceptions;
 
 import com.lakshan.user_service.models.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -151,15 +154,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex, HttpServletRequest request) {
+        log.warn("Data integrity violation at {}: {}", request.getRequestURI(), ex.getMessage());
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(LocalDateTime.now());
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setError(HttpStatus.CONFLICT.getReasonPhrase());
+        errorResponse.setMessage("A database conflict occurred. The resource may already exist or violates a unique constraint.");
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex, HttpServletRequest request) {
+        log.error("Unhandled exception at {}: ", request.getRequestURI(), ex);
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(LocalDateTime.now());
         errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-        errorResponse.setMessage("An unexpected error occurred: " + ex.getMessage());
+        errorResponse.setMessage("An unexpected internal error occurred. Please contact system administrator.");
         errorResponse.setPath(request.getRequestURI());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
