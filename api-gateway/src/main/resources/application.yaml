@@ -44,6 +44,7 @@ spring:
                 - Path=/roles/**, /users/**, /admin_profile/**, /doctor_profile/**,
                   /patient_profile/**, /technician_profile/**
               filters:
+              - name: JwtAuthentication
               - name: RequestRateLimiter
                 args:
                   redis-rate-limiter.replenishRate: 2
@@ -114,3 +115,15 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://discovery-service:8761/eureka/
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      show-details: never
+

@@ -50,9 +50,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserRequest userRequest) {
-        var dbUser = userService.getUserByEmail(userRequest.getEmail());
+        User dbUser;
+        try {
+            dbUser = userService.getUserByEmail(userRequest.getEmail());
+        } catch (Exception ex) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
 
-        if(!passwordEncoder.matches(userRequest.getPassword(), dbUser.getPassword())){
+        if (dbUser == null || !passwordEncoder.matches(userRequest.getPassword(), dbUser.getPassword())) {
             throw new InvalidCredentialsException("Invalid email or password");
         }
 

@@ -28,6 +28,14 @@ public class JwtAuthenticationGatewayFilterFactory
     @Value("${jwt.secret}")
     private String secret;
 
+    private static final java.util.List<String> PUBLIC_PATHS = java.util.List.of(
+            "/users/login",
+            "/users/addUser",
+            "/users/forgot-password",
+            "/users/verify-otp",
+            "/users/reset-password"
+    );
+
     public JwtAuthenticationGatewayFilterFactory() {
         super(Config.class);
     }
@@ -36,6 +44,13 @@ public class JwtAuthenticationGatewayFilterFactory
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
+            String path = request.getPath().value();
+
+            // Allow public authentication and registration endpoints through without JWT
+            if (PUBLIC_PATHS.stream().anyMatch(path::equalsIgnoreCase)) {
+                return chain.filter(exchange);
+            }
+
             String authHeader = request.getHeaders().getFirst("Authorization");
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
